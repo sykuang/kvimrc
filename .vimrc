@@ -103,6 +103,10 @@ Bundle 'Wombat'
 Bundle 'YankRing.vim'
 " Auto formater
 Plugin 'Chiel92/vim-autoformat'
+" CCTREE
+Plugin 'hari-rangarajan/CCTree'
+" rust
+Plugin 'rust-lang/rust.vim'
 " ============================================================================
 " Install plugins the first time vim runs
 
@@ -432,3 +436,6 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 "let g:airline_symbols.branch = '⭠'
 "let g:airline_symbols.readonly = '⭤'
 "let g:airline_symbols.linenr = '⭡'
+
+" Use rust autoformat
+let g:rustfmt_autosave = 1
