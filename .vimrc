@@ -107,6 +107,9 @@ Plugin 'Chiel92/vim-autoformat'
 Plugin 'hari-rangarajan/CCTree'
 " rust
 Plugin 'rust-lang/rust.vim'
+Plugin 'wesleyche/Trinity'
+Bundle 'wesleyche/SrcExpl'
+Bundle 'taglist.vim'
 " ============================================================================
 " Install plugins the first time vim runs
 
@@ -264,14 +267,14 @@ map <F2> :TaskList<CR>
 " disable default mappings, have a lot of conflicts with other plugins
 let g:vim_debug_disable_mappings = 1
 " add some useful mappings
-map <F5> :Dbg over<CR>
-map <F6> :Dbg into<CR>
-map <F7> :Dbg out<CR>
-map <F8> :Dbg here<CR>
-map <F9> :Dbg break<CR>
-map <F10> :Dbg watch<CR>
-map <F11> :Dbg down<CR>
-map <F12> :Dbg up<CR>
+"map <F5> :Dbg over<CR>
+"map <F6> :Dbg into<CR>
+"map <F7> :Dbg out<CR>
+"map <F8> :Dbg here<CR>
+"map <F9> :Dbg break<CR>
+"map <F10> :Dbg watch<CR>
+"map <F11> :Dbg down<CR>
+"map <F12> :Dbg up<CR>
 
 " CtrlP ------------------------------
 
@@ -387,8 +390,8 @@ vmap <expr> D DVB_Duplicate()
 " UPDATE it to reflect your preferences, it will speed up opening files
 let g:signify_vcs_list = [ 'git', 'hg' ]
 " mappings to jump to changed blocks
-nmap <leader>sn <plug>(signify-next-hunk)
-nmap <leader>sp <plug>(signify-prev-hunk)
+nmap <leader>gj <plug>(signify-next-hunk)
+nmap <leader>gk <plug>(signify-prev-hunk)
 " nicer colors
 highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
 highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
@@ -437,5 +440,52 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 "let g:airline_symbols.readonly = '⭤'
 "let g:airline_symbols.linenr = '⭡'
 
+ nmap <C-F11> :TrinityToggleNERDTree<CR>
+
 " Use rust autoformat
 let g:rustfmt_autosave = 1
+
+" Trinity settings
+" // The switch of the Source Explorer 
+nmap <F8> :SrcExplToggle<CR> 
+
+" // Set the height of Source Explorer window 
+let g:SrcExpl_winHeight = 8 
+
+" // Set 100 ms for refreshing the Source Explorer 
+let g:SrcExpl_refreshTime = 100 
+
+" // Set "Enter" key to jump into the exact definition context 
+let g:SrcExpl_jumpKey = "<ENTER>" 
+
+" // Set "Space" key for back from the definition context 
+let g:SrcExpl_gobackKey = "<SPACE>" 
+
+" // In order to avoid conflicts, the Source Explorer should know whatplugins
+" // except itself are using buffers. And you need add their buffer names into
+" // below listaccording to the command ":buffers!"
+let g:SrcExpl_pluginList = [ 
+            \ "__Tag_List__", 
+            \ "_NERD_tree_" 
+            \ ] 
+
+" // Enable/Disable the local definition searching, and note that this is not 
+" // guaranteed to work, the Source Explorer doesn't check the syntax for now. 
+" // It only searches for a match with the keyword according to command 'gd' 
+let g:SrcExpl_searchLocalDef = 1 
+
+" // Do not let the Source Explorer update the tags file when opening 
+let g:SrcExpl_isUpdateTags = 0 
+
+" // Use 'Exuberant Ctags' with '--sort=foldcase -R .' or '-L cscope.files' to 
+" // create/update the tags file 
+let g:SrcExpl_updateTagsCmd = "ctags --sort=foldcase -R ." 
+
+" // Set "<F12>" key for updating the tags file artificially 
+let g:SrcExpl_updateTagsKey = "<F12>" 
+
+" // Set "<F3>" key for displaying the previous definition in the jump list 
+"let g:SrcExpl_prevDefKey = "<F3>" 
+
+" // Set "<F4>" key for displaying the next definition in the jump list 
+"let g:SrcExpl_nextDefKey = "<F4>"
