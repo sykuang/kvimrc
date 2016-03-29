@@ -173,6 +173,8 @@ imap <M-Left> <ESC><c-w>h
 imap <M-Up> <ESC><c-w>k
 imap <M-Down> <ESC><c-w>j
 
+map <Up> gk
+map <Down> gj
 " old autocomplete keyboard shortcut
 imap <C-J> <C-X><C-O>
 
@@ -445,7 +447,8 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 " Use rust autoformat
 let g:rustfmt_autosave = 1
 
-" Trinity settings
+
+" Trinity settings --------------
 " // The switch of the Source Explorer 
 nmap <F8> :SrcExplToggle<CR> 
 
@@ -479,7 +482,7 @@ let g:SrcExpl_isUpdateTags = 0
 
 " // Use 'Exuberant Ctags' with '--sort=foldcase -R .' or '-L cscope.files' to 
 " // create/update the tags file 
-let g:SrcExpl_updateTagsCmd = "ctags --sort=foldcase -R ." 
+"let g:SrcExpl_updateTagsCmd = "ctags --sort=foldcase -R ." 
 
 " // Set "<F12>" key for updating the tags file artificially 
 let g:SrcExpl_updateTagsKey = "<F12>" 
@@ -489,3 +492,12 @@ let g:SrcExpl_updateTagsKey = "<F12>"
 
 " // Set "<F4>" key for displaying the next definition in the jump list 
 "let g:SrcExpl_nextDefKey = "<F4>"
+
+
+" Turn on spell checking
+nn <F7> :setlocal spell! spell?<CR>
+
+
+" Auto load ctags
+:nmap ,t :!(cd %:p:h;ctags *)&
+:set tags=./tags,./../tags,./../../tags,./../../../tags,tags
