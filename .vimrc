@@ -500,5 +500,11 @@ nn <F7> :setlocal spell! spell?<CR>
 
 
 " Auto load ctags
-:nmap ,t :!(cd %:p:h;ctags *)&
-:set tags=./tags,./../tags,./../../tags,./../../../tags,tags
+nmap ,t :!(cd %:p:h;ctags *)&
+set tags=./tags,./../tags,./../../tags,./../../../tags,tags
+
+" Show trailing whitespace and tab
+highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
+match ExtraWhitespace /\s\+$/
+set list!
+set listchars=tab:>-
