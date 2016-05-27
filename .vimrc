@@ -4,7 +4,7 @@
 
 " no vi-compatible
 set nocompatible
-
+set backspace=2
 " Setting up Vundle - the vim plugin bundler
 let iCanHazVundle=1
 let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
@@ -60,21 +60,24 @@ Bundle 'fisadev/FixedTaskList.vim'
 " Surround
 Bundle 'tpope/vim-surround'
 " Autoclose
-Bundle 'Townk/vim-autoclose'
+"Bundle 'Townk/vim-autoclose'
 " Indent text object
 Bundle 'michaeljsmith/vim-indent-object'
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
 " operators, highlighting, run and ipdb breakpoints)
 Bundle 'klen/python-mode'
-" Better autocompletion
-Bundle 'Shougo/neocomplcache.vim'
+ "Better autocompletion
+"Bundle 'Shougo/neocomplcache.vim'
+" YouCompleteMe
+Bundle 'Valloric/YouCompleteMe'
 " Snippets manager (SnipMate), dependencies, and snippets repo
 Bundle 'MarcWeber/vim-addon-mw-utils'
 Bundle 'tomtom/tlib_vim'
 Bundle 'honza/vim-snippets'
 Bundle 'garbas/vim-snipmate'
 " Git/mercurial/others diff icons on the side of the file lines
-Bundle 'mhinz/vim-signify'
+"Bundle 'mhinz/vim-signify'
+Bundle 'airblade/vim-gitgutter'
 " Automatically sort python imports
 Bundle 'fisadev/vim-isort'
 " Drag visual blocks arround
@@ -111,6 +114,11 @@ Plugin 'rust-lang/rust.vim'
 Plugin 'wesleyche/Trinity'
 Bundle 'wesleyche/SrcExpl'
 Bundle 'taglist.vim'
+" vim-localvimrc
+Bundle 'embear/vim-localvimrc'
+" vimspell
+Bundle 'vimspell'
+
 " ============================================================================
 " Install plugins the first time vim runs
 
@@ -156,8 +164,8 @@ set nu
 " tab navigation mappings
 map tn :tabn<CR>
 map tp :tabp<CR>
-map tm :tabm 
-map tt :tabnew 
+map tm :tabm
+map tt :tabnew
 map ts :tab split<CR>
 map <C-S-Right> :tabn<CR>
 imap <C-S-Right> <ESC>:tabn<CR>
@@ -350,21 +358,21 @@ nmap ,o :RopeFindOccurrences<CR>
 " most of them not documented because I'm not sure how they work
 " (docs aren't good, had to do a lot of trial and error to make 
 " it play nice)
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_ignore_case = 1
-let g:neocomplcache_enable_smart_case = 1
-let g:neocomplcache_enable_auto_select = 1
-let g:neocomplcache_enable_fuzzy_completion = 1
-let g:neocomplcache_enable_camel_case_completion = 1
-let g:neocomplcache_enable_underbar_completion = 1
-let g:neocomplcache_fuzzy_completion_start_length = 1
-let g:neocomplcache_auto_completion_start_length = 1
-let g:neocomplcache_manual_completion_start_length = 1
-let g:neocomplcache_min_keyword_length = 1
-let g:neocomplcache_min_syntax_length = 1
-" complete with workds from any opened file
-let g:neocomplcache_same_filetype_lists = {}
-let g:neocomplcache_same_filetype_lists._ = '_'
+"let g:neocomplcache_enable_at_startup = 1
+"let g:neocomplcache_enable_ignore_case = 1
+"let g:neocomplcache_enable_smart_case = 1
+"let g:neocomplcache_enable_auto_select = 1
+"let g:neocomplcache_enable_fuzzy_completion = 1
+"let g:neocomplcache_enable_camel_case_completion = 1
+"let g:neocomplcache_enable_underbar_completion = 1
+"let g:neocomplcache_fuzzy_completion_start_length = 1
+"let g:neocomplcache_auto_completion_start_length = 1
+"let g:neocomplcache_manual_completion_start_length = 1
+"let g:neocomplcache_min_keyword_length = 1
+"let g:neocomplcache_min_syntax_length = 1
+ "complete with workds from any opened file
+"let g:neocomplcache_same_filetype_lists = {}
+"let g:neocomplcache_same_filetype_lists._ = '_'
 
 " TabMan ------------------------------
 
@@ -483,7 +491,7 @@ let g:SrcExpl_isUpdateTags = 0
 
 " // Use 'Exuberant Ctags' with '--sort=foldcase -R .' or '-L cscope.files' to 
 " // create/update the tags file 
-"let g:SrcExpl_updateTagsCmd = "ctags --sort=foldcase -R ." 
+let g:SrcExpl_updateTagsCmd = "ctags -L ./tags,./../tags,./../../tags,./../../../tags,tags" 
 
 " // Set "<F12>" key for updating the tags file artificially 
 let g:SrcExpl_updateTagsKey = "<F12>" 
@@ -502,9 +510,33 @@ nn <F7> :setlocal spell! spell?<CR>
 " Auto load ctags
 nmap ,t :!(cd %:p:h;ctags *)&
 set tags=./tags,./../tags,./../../tags,./../../../tags,tags
+cs add cscope.out
 
 " Show trailing whitespace and tab
 highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
 match ExtraWhitespace /\s\+$/
 set list!
 set listchars=tab:>-
+
+"Set window nevigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+"Set YouCompleteMe
+"let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_filepath_completion_use_working_dir = 1
+
+" Set vim-gitgutter updatetime
+set updatetime=1000
+
+" Set local vimrc
+let g:localvimrc_ask=0
+let g:localvimrc_sandbox=0
+
+" Set vimspell
+set spelllang=en_us
+"set spell
+syntax enable
