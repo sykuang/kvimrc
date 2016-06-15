@@ -1,136 +1,147 @@
+" Fisa-vim-config
+" http://fisadev.github.io/fisa-vim-config/
+" version: 8.0
+"
+"
 " ============================================================================
-" Vundle initialization
+" Vim-plug initialization
 " Avoid modify this section, unless you are very sure of what you are doing
-
-" no vi-compatible
-set nocompatible
-set backspace=2
-" Setting up Vundle - the vim plugin bundler
-let iCanHazVundle=1
-let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
-if !filereadable(vundle_readme)
-    echo "Installing Vundle..."
+"
+let vim_plug_just_installed = 0
+let vim_plug_path = expand('~/.vim/autoload/plug.vim')
+if !filereadable(vim_plug_path)
+    echo "Installing Vim-plug..."
     echo ""
-    silent !mkdir -p ~/.vim/bundle
-    silent !git clone https://github.com/gmarik/vundle ~/.vim/bundle/vundle
-    let iCanHazVundle=0
+    silent !mkdir -p ~/.vim/autoload
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    let vim_plug_just_installed = 1
 endif
 
-filetype off
+" manually load vim-plug the first time
+if vim_plug_just_installed
+    :execute 'source '.fnameescape(vim_plug_path)
+endif
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-
-" let Vundle manage Vundle
-Bundle 'gmarik/vundle'
+" Obscure hacks done, you can now modify the rest of the .vimrc as you wish :)
 
 " ============================================================================
+
 " Active plugins
 " You can disable or add new ones here:
-
+call plug#begin('~/.vim/plugged')
 " Plugins from github repos:
 
 " Python and PHP Debugger
-Bundle 'fisadev/vim-debug.vim'
+Plug 'fisadev/vim-debug.vim', { 'for': ['py', 'php'] }
 " Better file browser
-Bundle 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree'
 " Code commenter
-Bundle 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdcommenter'
 " Class/module browser
-Bundle 'majutsushi/tagbar'
+Plug 'majutsushi/tagbar'
 " Code and files fuzzy finder
-Bundle 'kien/ctrlp.vim'
+Plug 'kien/ctrlp.vim'
 " Extension to ctrlp, for fuzzy command finder
-Bundle 'fisadev/vim-ctrlp-cmdpalette'
+Plug 'fisadev/vim-ctrlp-cmdpalette'
 " Zen coding
-Bundle 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim'
 " Git integration
-Bundle 'motemen/git-vim'
+Plug 'motemen/git-vim'
 " Tab list panel
-Bundle 'kien/tabman.vim'
+Plug 'kien/tabman.vim'
 " Airline
-Bundle 'vim-airline/vim-airline' 
-Bundle 'vim-airline/vim-airline-themes' 
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 " Terminal Vim with 256 colors colorscheme
-Bundle 'fisadev/fisa-vim-colorscheme'
+Plug 'fisadev/fisa-vim-colorscheme'
 " Consoles as buffers
-Bundle 'rosenfeld/conque-term'
+Plug 'rosenfeld/conque-term'
 " Pending tasks list
-Bundle 'fisadev/FixedTaskList.vim'
+Plug 'fisadev/FixedTaskList.vim'
 " Surround
-Bundle 'tpope/vim-surround'
+Plug 'tpope/vim-surround'
 " Autoclose
-"Bundle 'Townk/vim-autoclose'
+"Plug 'Townk/vim-autoclose'
 " Indent text object
-Bundle 'michaeljsmith/vim-indent-object'
+Plug 'michaeljsmith/vim-indent-object'
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
 " operators, highlighting, run and ipdb breakpoints)
-Bundle 'klen/python-mode'
+Plug 'klen/python-mode'
  "Better autocompletion
-"Bundle 'Shougo/neocomplcache.vim'
+"Plug 'Shougo/neocomplcache.vim'
 " YouCompleteMe
-Bundle 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe',{'for': ['cpp','c','h'], 'do': './install.py --clang-completer' }
+Plug 'davidhalter/jedi'
+Plug 'rdnetto/YCM-Generator',{'branch':'stable'}
 " Snippets manager (SnipMate), dependencies, and snippets repo
-Bundle 'MarcWeber/vim-addon-mw-utils'
-Bundle 'tomtom/tlib_vim'
-Bundle 'honza/vim-snippets'
-Bundle 'garbas/vim-snipmate'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'honza/vim-snippets'
+Plug 'garbas/vim-snipmate'
 " Git/mercurial/others diff icons on the side of the file lines
-"Bundle 'mhinz/vim-signify'
-Bundle 'airblade/vim-gitgutter'
+"Plug 'mhinz/vim-signify'
+Plug 'airblade/vim-gitgutter'
 " Automatically sort python imports
-Bundle 'fisadev/vim-isort'
+Plug 'fisadev/vim-isort',{'for':'py'}
 " Drag visual blocks arround
-Bundle 'fisadev/dragvisuals.vim'
+Plug 'fisadev/dragvisuals.vim'
 " Window chooser
-Bundle 't9md/vim-choosewin'
+Plug 't9md/vim-choosewin'
 " Python and other languages code checker
-Bundle 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic',{'for': ['py','sh'] }
 " Paint css colors with the real color
-Bundle 'lilydjwg/colorizer'
+Plug 'lilydjwg/colorizer'
 " Relative numbering of lines (0 is the current line)
 " (disabled by default because is very intrusive and can't be easily toggled
 " on/off. When the plugin is present, will always activate the relative 
 " numbering every time you go to normal mode. Author refuses to add a setting 
 " to avoid that)
-" Bundle 'myusuf3/numbers.vim'
+" Plug 'myusuf3/numbers.vim'
 
 " Plugins from vim-scripts repos:
 
 " Search results counter
-Bundle 'IndexedSearch'
+Plug 'IndexedSearch'
 " XML/HTML tags navigation
-Bundle 'matchit.zip'
+Plug 'matchit.zip'
 " Gvim colorscheme
-Bundle 'Wombat'
+Plug 'Wombat'
 " Yank history navigation
-Bundle 'YankRing.vim'
+Plug 'YankRing.vim'
 " Auto formater
-Plugin 'Chiel92/vim-autoformat'
+Plug 'Chiel92/vim-autoformat'
 " CCTREE
-Plugin 'hari-rangarajan/CCTree'
+Plug 'hari-rangarajan/CCTree'
 " rust
-Plugin 'rust-lang/rust.vim'
-Plugin 'wesleyche/Trinity'
-Bundle 'wesleyche/SrcExpl'
-Bundle 'taglist.vim'
+Plug 'rust-lang/rust.vim'
+Plug 'wesleyche/Trinity'
+Plug 'wesleyche/SrcExpl'
+Plug 'taglist.vim'
 " vim-localvimrc
-Bundle 'embear/vim-localvimrc'
+Plug 'embear/vim-localvimrc'
 " vimspell
-Bundle 'vimspell'
-
+Plug 'vimspell'
+ "vim-misc
+"Plug 'xolox/vim-misc'
+ "easytag
+"Plug 'xolox/vim-easytags'
+" Undo tree
+Plug 'mbbill/undotree'
+call plug#end()
 " ============================================================================
 " Install plugins the first time vim runs
 
-if iCanHazVundle == 0
+if vim_plug_just_installed
     echo "Installing Bundles, please ignore key map error messages"
-    echo ""
-    :BundleInstall
+    :PlugInstall
 endif
 
 " ============================================================================
 " Vim settings and mappings
 " You can edit them as you wish
+
+" no vi-compatible
+set nocompatible
 
 " allow plugins by file type (required for plugins!)
 filetype plugin on
@@ -207,8 +218,8 @@ nmap ,wR :RecurGrep <cword><CR>
 nmap ,wr :RecurGrepFast <cword><CR>
 
 " use 256 colors when possible
-if &term =~? 'mlterm\|xterm\|xterm-256\|screen-256'
-	let &t_Co = 256
+if (&term =~? 'mlterm\|xterm\|xterm-256\|screen-256') || has('nvim')
+    let &t_Co = 256
     colorscheme fisa
 else
     colorscheme delek
@@ -267,7 +278,6 @@ nmap ,t :NERDTreeFind<CR>
 " don;t show these file types
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 
-
 " Tasklist ------------------------------
 
 " show pending tasks list
@@ -325,33 +335,33 @@ let g:ctrlp_custom_ignore = {
 " Syntastic ------------------------------
 
 " show list of errors and warnings on the current file
-nmap <leader>e :Errors<CR>
+"nmap <leader>e :Errors<CR>
 " check also when just opened the file
-let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_open = 1
 " don't put icons on the sign column (it hides the vcs status icons of signify)
-let g:syntastic_enable_signs = 0
+"let g:syntastic_enable_signs = 0
 " custom icons (enable them if you use a patched font, and enable the previous 
 " setting)
 "let g:syntastic_error_symbol = '✗'
 "let g:syntastic_warning_symbol = '⚠'
 "let g:syntastic_style_error_symbol = '✗'
 "let g:syntastic_style_warning_symbol = '⚠'
-
+"let g:Syntastic_cpp_remove_include_errors = 1
 " Python-mode ------------------------------
 
 " don't use linter, we use syntastic for that
-let g:pymode_lint_on_write = 0
-let g:pymode_lint_signs = 0
+"let g:pymode_lint_on_write = 0
+"let g:pymode_lint_signs = 0
 " don't fold python code on open
-let g:pymode_folding = 0
+"let g:pymode_folding = 0
 " don't load rope by default. Change to 1 to use rope
-let g:pymode_rope = 0
+"let g:pymode_rope = 0
 " open definitions on same window, and custom mappings for definitions and
 " occurrences
-let g:pymode_rope_goto_definition_bind = ',d'
-let g:pymode_rope_goto_definition_cmd = 'e'
-nmap ,D :tab split<CR>:PymodePython rope.goto()<CR>
-nmap ,o :RopeFindOccurrences<CR>
+"let g:pymode_rope_goto_definition_bind = ',d'
+"let g:pymode_rope_goto_definition_cmd = 'e'
+"nmap ,D :tab split<CR>:PymodePython rope.goto()<CR>
+"nmap ,o :RopeFindOccurrences<CR>
 
 " NeoComplCache ------------------------------
 
@@ -465,7 +475,7 @@ nmap <F8> :SrcExplToggle<CR>
 let g:SrcExpl_winHeight = 8 
 
 " // Set 100 ms for refreshing the Source Explorer 
-let g:SrcExpl_refreshTime = 100 
+let g:SrcExpl_refreshTime = 1000 
 
 " // Set "Enter" key to jump into the exact definition context 
 let g:SrcExpl_jumpKey = "<ENTER>" 
@@ -491,7 +501,7 @@ let g:SrcExpl_isUpdateTags = 0
 
 " // Use 'Exuberant Ctags' with '--sort=foldcase -R .' or '-L cscope.files' to 
 " // create/update the tags file 
-let g:SrcExpl_updateTagsCmd = "ctags -L ./tags,./../tags,./../../tags,./../../../tags,tags" 
+"let g:SrcExpl_updateTagsCmd = "ctags -L ./tags,./../tags,./../../tags,./../../../tags,tags" 
 
 " // Set "<F12>" key for updating the tags file artificially 
 let g:SrcExpl_updateTagsKey = "<F12>" 
@@ -507,17 +517,6 @@ let g:SrcExpl_updateTagsKey = "<F12>"
 nn <F7> :setlocal spell! spell?<CR>
 
 
-" Auto load ctags
-nmap ,t :!(cd %:p:h;ctags *)&
-set tags=./tags,./../tags,./../../tags,./../../../tags,tags
-cs add cscope.out
-
-" Show trailing whitespace and tab
-highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
-match ExtraWhitespace /\s\+$/
-set list!
-set listchars=tab:>-
-
 "Set window nevigation
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -528,6 +527,10 @@ nnoremap <C-l> <C-w>l
 "let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_filepath_completion_use_working_dir = 1
+nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
+let g:ycm_enable_diagnostic_signs=0
 
 " Set vim-gitgutter updatetime
 set updatetime=1000
@@ -540,3 +543,21 @@ let g:localvimrc_sandbox=0
 set spelllang=en_us
 "set spell
 syntax enable
+
+" Show trailing whitespace and tab
+highlight ExtraWhitespace ctermbg=green guibg=darkgreen
+match ExtraWhitespace /\s\+$/
+autocmd FileType c,cpp set list!
+autocmd FileType c,cpp set listchars=tab:>-
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
+" Set Foldenable
+set foldenable
+ "Easy-tag
+"let g:easytags_always_enabled = 0
+"let g:easytags_async = 1
+"let g:easytags_dynamic_files = 1
+"let g:easytags_auto_update = 0
