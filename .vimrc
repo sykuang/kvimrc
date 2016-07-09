@@ -121,12 +121,9 @@ Plug 'taglist.vim'
 Plug 'embear/vim-localvimrc'
 " vimspell
 Plug 'vimspell'
- "vim-misc
-"Plug 'xolox/vim-misc'
- "easytag
-"Plug 'xolox/vim-easytags'
 " Undo tree
 Plug 'mbbill/undotree'
+
 call plug#end()
 " ============================================================================
 " Install plugins the first time vim runs
@@ -325,13 +322,15 @@ nmap ,pe :call CtrlPWithSearchText(expand('<cfile>'), '')<CR>
 nmap ,wm :call CtrlPWithSearchText(expand('<cword>'), 'MRUFiles')<CR>
 nmap ,wc :call CtrlPWithSearchText(expand('<cword>'), 'CmdPalette')<CR>
 " don't change working directory
-let g:ctrlp_working_path_mode = 0
+let g:ctrlp_working_path_mode = 'ra'
 " ignore these files and folders on file finder
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](\.git|\.hg|\.svn)$',
-  \ 'file': '\.pyc$\|\.pyo$',
+  \ 'file': '\.pyc$\|\.pyo$\|\.o$\|\.o.cmd\|\.log$\|\.ko$\',
   \ }
-
+let g:ctrlp_use_caching = 1
+let g:ctrlp_max_files = 20000
+let g:ctrlp_root_markers = ['.ctrlp']
 " Syntastic ------------------------------
 
 " show list of errors and warnings on the current file
@@ -556,8 +555,3 @@ autocmd BufWinLeave * call clearmatches()
 
 " Set Foldenable
 set foldenable
- "Easy-tag
-"let g:easytags_always_enabled = 0
-"let g:easytags_async = 1
-"let g:easytags_dynamic_files = 1
-"let g:easytags_auto_update = 0
