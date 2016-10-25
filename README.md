@@ -10,7 +10,7 @@
     3. Istall ctags and other application 
         * Ubuntu
         ```
-        sudo apt-get install vim exuberant-ctags git 
+        sudo apt-get install exuberant-ctags git 
         ```
         * OS X
         ```

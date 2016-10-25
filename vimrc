@@ -67,8 +67,8 @@ Plug 'michaeljsmith/vim-indent-object'
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
 " operators, highlighting, run and ipdb breakpoints)
 Plug 'klen/python-mode'
- "Better autocompletion
-"Plug 'Shougo/neocomplcache.vim'
+"Better autocompletion
+Plug 'Shougo/neocomplcache.vim',{'for': ['sh']}
 " YouCompleteMe
 Plug 'Valloric/YouCompleteMe',{'for': ['cpp','c','h'], 'do': './install.py --clang-completer' }
 Plug 'davidhalter/jedi'
@@ -172,6 +172,8 @@ set nu
 " tab navigation mappings
 map tn :tabn<CR>
 map tp :tabp<CR>
+map [1;5C :tabn<CR>
+map [1;5D :tabp<CR>
 map tm :tabm
 map tt :tabnew
 map ts :tab split<CR>
@@ -263,6 +265,8 @@ endif
 
 " toggle tagbar display
 map <F4> :TagbarToggle<CR>
+map [26~ :TagbarToggle<CR>
+
 " autofocus on tagbar open
 let g:tagbar_autofocus = 1
 
@@ -270,6 +274,7 @@ let g:tagbar_autofocus = 1
 
 " toggle nerdtree display
 map <F3> :NERDTreeToggle<CR>
+map [25~ :NERDTreeToggle<CR>
 " open nerdtree with the current file selected
 nmap ,t :NERDTreeFind<CR>
 " don;t show these file types
@@ -513,8 +518,8 @@ let g:SrcExpl_updateTagsKey = "<F12>"
 
 
 " Turn on spell checking
-nn <F7> :setlocal spell! spell?<CR>
-
+nn <C-F7> :setlocal spell! spell?<CR>
+nn [31~ :setlocal spell! spell?<CR>
 
 "Set window nevigation
 nnoremap <C-h> <C-w>h
