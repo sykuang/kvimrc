@@ -5,12 +5,12 @@
         ```
     2. Istall python modules by pip 
         ```
-        sudo pip install dbgp vim-debug pep8 flake8 pyflakes isort 
+        sudo pip install dbgp vim-debug pep8 flake8 pyflakes isort autopep8 
         ```
     3. Istall ctags and other application 
         * Ubuntu
         ```
-        sudo apt-get install exuberant-ctags git 
+        sudo apt-get install exuberant-ctags git astyle 
         ```
         * OS X
         ```

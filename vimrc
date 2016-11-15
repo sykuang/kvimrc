@@ -34,7 +34,7 @@ call plug#begin('~/.vim/plugged')
 " Python and PHP Debugger
 Plug 'fisadev/vim-debug.vim', { 'for': ['py', 'php'] }
 " Better file browser
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Code commenter
 Plug 'scrooloose/nerdcommenter'
 " Class/module browser
@@ -66,35 +66,33 @@ Plug 'tpope/vim-surround'
 Plug 'michaeljsmith/vim-indent-object'
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
 " operators, highlighting, run and ipdb breakpoints)
-Plug 'klen/python-mode'
+Plug 'klen/python-mode',{'for': ['python'] }
 "Better autocompletion
 Plug 'Shougo/neocomplcache.vim',{'for': ['sh']}
 " YouCompleteMe
-Plug 'Valloric/YouCompleteMe',{'for': ['cpp','c','h'], 'do': './install.py --clang-completer' }
-Plug 'davidhalter/jedi'
+Plug 'Valloric/YouCompleteMe',{'for': ['cpp','c','python'], 'do': 'YCM_CORES=2 ./install.py --clang-completer' }
+Plug 'davidhalter/jedi',{'for': ['python']}
 Plug 'rdnetto/YCM-Generator',{'branch':'stable'}
 " Snippets manager (SnipMate), dependencies, and snippets repo
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 Plug 'honza/vim-snippets'
 Plug 'garbas/vim-snipmate'
-" Git/mercurial/others diff icons on the side of the file lines
-"Plug 'mhinz/vim-signify'
 Plug 'airblade/vim-gitgutter'
 " Automatically sort python imports
-Plug 'fisadev/vim-isort',{'for':'py'}
+Plug 'fisadev/vim-isort',{'for':'python'}
 " Drag visual blocks arround
 Plug 'fisadev/dragvisuals.vim'
 " Window chooser
 Plug 't9md/vim-choosewin'
 " Python and other languages code checker
-Plug 'scrooloose/syntastic',{'for': ['py','sh'] }
+Plug 'scrooloose/syntastic',{'for': ['python','sh'] }
 " Paint css colors with the real color
-Plug 'lilydjwg/colorizer'
+Plug 'lilydjwg/colorizer',{'for': ['css'] }
 " Relative numbering of lines (0 is the current line)
 " (disabled by default because is very intrusive and can't be easily toggled
-" on/off. When the plugin is present, will always activate the relative 
-" numbering every time you go to normal mode. Author refuses to add a setting 
+" on/off. When the plugin is present, will always activate the relative
+" numbering every time you go to normal mode. Author refuses to add a setting
 " to avoid that)
 " Plug 'myusuf3/numbers.vim'
 
@@ -111,7 +109,7 @@ Plug 'YankRing.vim'
 " Auto formater
 Plug 'Chiel92/vim-autoformat'
 " CCTREE
-Plug 'hari-rangarajan/CCTree'
+Plug 'hari-rangarajan/CCTree',{'for':['c','cpp']}
 " rust
 Plug 'rust-lang/rust.vim'
 Plug 'wesleyche/Trinity'
@@ -210,8 +208,8 @@ ca w!! w !sudo tee "%"
 command! -nargs=1 RecurGrep lvimgrep /<args>/gj ./**/*.* | lopen | set nowrap
 command! -nargs=1 RecurGrepFast silent exec 'lgrep! <q-args> ./**/*.*' | lopen
 " mappings to call them
-nmap ,R :RecurGrep 
-nmap ,r :RecurGrepFast 
+nmap ,R :RecurGrep
+nmap ,r :RecurGrepFast
 " mappings to call them with the default word as search text
 nmap ,wR :RecurGrep <cword><CR>
 nmap ,wr :RecurGrepFast <cword><CR>
@@ -261,7 +259,7 @@ endif
 " Plugins settings and mappings
 " Edit them as you wish.
 
-" Tagbar ----------------------------- 
+" Tagbar -----------------------------
 
 " toggle tagbar display
 map <F4> :TagbarToggle<CR>
@@ -270,7 +268,7 @@ map [26~ :TagbarToggle<CR>
 " autofocus on tagbar open
 let g:tagbar_autofocus = 1
 
-" NERDTree ----------------------------- 
+" NERDTree -----------------------------
 
 " toggle nerdtree display
 map <F3> :NERDTreeToggle<CR>
@@ -330,9 +328,9 @@ nmap ,wc :call CtrlPWithSearchText(expand('<cword>'), 'CmdPalette')<CR>
 let g:ctrlp_working_path_mode = 'ra'
 " ignore these files and folders on file finder
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](\.git|\.hg|\.svn)$',
-  \ 'file': '\.pyc$\|\.pyo$\|\.o$\|\.o.cmd\|\.log$\|\.ko$\',
-  \ }
+            \ 'dir':  '\v[\/](\.git|\.hg|\.svn)$',
+            \ 'file': '\.pyc$\|\.pyo$\|\.o$\|\.o.cmd\|\.log$\|\.ko$\',
+            \ }
 let g:ctrlp_use_caching = 1
 let g:ctrlp_max_files = 20000
 let g:ctrlp_root_markers = ['.ctrlp']
@@ -344,7 +342,7 @@ let g:ctrlp_root_markers = ['.ctrlp']
 "let g:syntastic_check_on_open = 1
 " don't put icons on the sign column (it hides the vcs status icons of signify)
 "let g:syntastic_enable_signs = 0
-" custom icons (enable them if you use a patched font, and enable the previous 
+" custom icons (enable them if you use a patched font, and enable the previous
 " setting)
 "let g:syntastic_error_symbol = '✗'
 "let g:syntastic_warning_symbol = '⚠'
@@ -370,7 +368,7 @@ let g:ctrlp_root_markers = ['.ctrlp']
 " NeoComplCache ------------------------------
 
 " most of them not documented because I'm not sure how they work
-" (docs aren't good, had to do a lot of trial and error to make 
+" (docs aren't good, had to do a lot of trial and error to make
 " it play nice)
 "let g:neocomplcache_enable_at_startup = 1
 "let g:neocomplcache_enable_ignore_case = 1
@@ -384,7 +382,7 @@ let g:ctrlp_root_markers = ['.ctrlp']
 "let g:neocomplcache_manual_completion_start_length = 1
 "let g:neocomplcache_min_keyword_length = 1
 "let g:neocomplcache_min_syntax_length = 1
- "complete with workds from any opened file
+"complete with workds from any opened file
 "let g:neocomplcache_same_filetype_lists = {}
 "let g:neocomplcache_same_filetype_lists._ = '_'
 
@@ -440,7 +438,7 @@ let g:airline#extensions#whitespace#enabled = 0
 
 " Autoformat
 let g:formatdef_astyle_c = '"astyle --mode=c --style=allman --convert-tabs --indent=spaces=4 --break-blocks --add-brackets"'
-let g:formatters_c =['astyle_c'] 
+let g:formatters_c =['astyle_c']
 let g:autoformat_verbosemode = 1
 " cscope shortcut
 
@@ -465,55 +463,55 @@ nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 "let g:airline_symbols.readonly = '⭤'
 "let g:airline_symbols.linenr = '⭡'
 
- nmap <C-F11> :TrinityToggleNERDTree<CR>
+nmap <C-F11> :TrinityToggleNERDTree<CR>
 
 " Use rust autoformat
 let g:rustfmt_autosave = 1
 
 
 " Trinity settings --------------
-" // The switch of the Source Explorer 
-nmap <F8> :SrcExplToggle<CR> 
+" // The switch of the Source Explorer
+nmap <F8> :SrcExplToggle<CR>
 
-" // Set the height of Source Explorer window 
-let g:SrcExpl_winHeight = 8 
+" // Set the height of Source Explorer window
+let g:SrcExpl_winHeight = 8
 
-" // Set 100 ms for refreshing the Source Explorer 
-let g:SrcExpl_refreshTime = 1000 
+" // Set 100 ms for refreshing the Source Explorer
+let g:SrcExpl_refreshTime = 1000
 
-" // Set "Enter" key to jump into the exact definition context 
-let g:SrcExpl_jumpKey = "<ENTER>" 
+" // Set "Enter" key to jump into the exact definition context
+let g:SrcExpl_jumpKey = "<ENTER>"
 
-" // Set "Space" key for back from the definition context 
-let g:SrcExpl_gobackKey = "<SPACE>" 
+" // Set "Space" key for back from the definition context
+let g:SrcExpl_gobackKey = "<SPACE>"
 
 " // In order to avoid conflicts, the Source Explorer should know whatplugins
 " // except itself are using buffers. And you need add their buffer names into
 " // below listaccording to the command ":buffers!"
-let g:SrcExpl_pluginList = [ 
-            \ "__Tag_List__", 
-            \ "_NERD_tree_" 
-            \ ] 
+let g:SrcExpl_pluginList = [
+            \ "__Tag_List__",
+            \ "_NERD_tree_"
+            \ ]
 
-" // Enable/Disable the local definition searching, and note that this is not 
-" // guaranteed to work, the Source Explorer doesn't check the syntax for now. 
-" // It only searches for a match with the keyword according to command 'gd' 
-let g:SrcExpl_searchLocalDef = 1 
+" // Enable/Disable the local definition searching, and note that this is not
+" // guaranteed to work, the Source Explorer doesn't check the syntax for now.
+" // It only searches for a match with the keyword according to command 'gd'
+let g:SrcExpl_searchLocalDef = 1
 
-" // Do not let the Source Explorer update the tags file when opening 
-let g:SrcExpl_isUpdateTags = 0 
+" // Do not let the Source Explorer update the tags file when opening
+let g:SrcExpl_isUpdateTags = 0
 
-" // Use 'Exuberant Ctags' with '--sort=foldcase -R .' or '-L cscope.files' to 
-" // create/update the tags file 
-"let g:SrcExpl_updateTagsCmd = "ctags -L ./tags,./../tags,./../../tags,./../../../tags,tags" 
+" // Use 'Exuberant Ctags' with '--sort=foldcase -R .' or '-L cscope.files' to
+" // create/update the tags file
+"let g:SrcExpl_updateTagsCmd = "ctags -L ./tags,./../tags,./../../tags,./../../../tags,tags"
 
-" // Set "<F12>" key for updating the tags file artificially 
-let g:SrcExpl_updateTagsKey = "<F12>" 
+" // Set "<F12>" key for updating the tags file artificially
+let g:SrcExpl_updateTagsKey = "<F12>"
 
-" // Set "<F3>" key for displaying the previous definition in the jump list 
-"let g:SrcExpl_prevDefKey = "<F3>" 
+" // Set "<F3>" key for displaying the previous definition in the jump list
+"let g:SrcExpl_prevDefKey = "<F3>"
 
-" // Set "<F4>" key for displaying the next definition in the jump list 
+" // Set "<F4>" key for displaying the next definition in the jump list
 "let g:SrcExpl_nextDefKey = "<F4>"
 
 
@@ -535,6 +533,7 @@ nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 let g:ycm_enable_diagnostic_signs=0
+let g:ycm_python_binary_path = 'python'
 
 " Set vim-gitgutter updatetime
 set updatetime=1000
@@ -560,3 +559,16 @@ autocmd BufWinLeave * call clearmatches()
 
 " Set Foldenable
 set foldenable
+
+" check one time after 4s of inactivity in normal mode
+set autoread"
+au CursorHold * checktime
+
+" Set filetype
+autocmd BufNewFile,BufRead *.py setf python
+autocmd BufNewFile,BufRead *.sh setf sh
+autocmd BufNewFile,BufRead *.css setf css
+
+" Autoformat
+noremap <F1> :Autoformat<CR>
+noremap [23~ :Autoformat<CR>
