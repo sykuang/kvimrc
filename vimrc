@@ -37,8 +37,6 @@ Plug 'fisadev/vim-debug.vim', { 'for': ['py', 'php'] }
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 " Code commenter
 Plug 'scrooloose/nerdcommenter'
-" Class/module browser
-Plug 'majutsushi/tagbar'
 " Code and files fuzzy finder
 Plug 'kien/ctrlp.vim'
 " Extension to ctrlp, for fuzzy command finder
@@ -70,9 +68,9 @@ Plug 'klen/python-mode',{'for': ['python'] }
 "Better autocompletion
 Plug 'Shougo/neocomplcache.vim',{'for': ['sh']}
 " YouCompleteMe
-Plug 'Valloric/YouCompleteMe',{'for': ['cpp','c','python'], 'do': 'YCM_CORES=2 ./install.py --clang-completer' }
-Plug 'davidhalter/jedi',{'for': ['python']}
-Plug 'rdnetto/YCM-Generator',{'branch':'stable'}
+Plug 'Valloric/YouCompleteMe',{ 'do': 'YCM_CORES=2 ./install.py --clang-completer' }
+Plug 'davidhalter/jedi'
+Plug 'kenkuang1213/YCM-Generator',{'branch':'stable'}
 " Snippets manager (SnipMate), dependencies, and snippets repo
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
@@ -101,7 +99,7 @@ Plug 'lilydjwg/colorizer',{'for': ['css'] }
 " Search results counter
 Plug 'IndexedSearch'
 " XML/HTML tags navigation
-Plug 'matchit.zip'
+Plug 'matchit.zip', { 'for': ['xml', 'htmp'] }
 " Gvim colorscheme
 Plug 'Wombat'
 " Yank history navigation
@@ -113,7 +111,7 @@ Plug 'hari-rangarajan/CCTree',{'for':['c','cpp']}
 " rust
 Plug 'rust-lang/rust.vim'
 Plug 'wesleyche/Trinity'
-Plug 'wesleyche/SrcExpl'
+Plug 'wesleyche/SrcExpl', { 'on': 'SrcExplToggle' }
 Plug 'taglist.vim'
 " vim-localvimrc
 Plug 'embear/vim-localvimrc'
@@ -121,6 +119,8 @@ Plug 'embear/vim-localvimrc'
 Plug 'vimspell'
 " Undo tree
 Plug 'mbbill/undotree'
+" Mark
+Plug 'Yggdroot/vim-mark'
 
 call plug#end()
 " ============================================================================
@@ -166,7 +166,7 @@ syntax on
 
 " show line numbers
 set nu
-
+let mapleader=";"
 " tab navigation mappings
 map tn :tabn<CR>
 map tp :tabp<CR>
@@ -259,11 +259,11 @@ endif
 " Plugins settings and mappings
 " Edit them as you wish.
 
-" Tagbar -----------------------------
+" Taglist -----------------------------
 
 " toggle tagbar display
-map <F4> :TagbarToggle<CR>
-map [26~ :TagbarToggle<CR>
+map <F4> :TlistToggle<CR>
+map [26~ :TlistToggle<CR>
 
 " autofocus on tagbar open
 let g:tagbar_autofocus = 1
@@ -526,15 +526,15 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 "Set YouCompleteMe
-"let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_filepath_completion_use_working_dir = 1
 nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 let g:ycm_enable_diagnostic_signs=0
-let g:ycm_python_binary_path = 'python'
-
+let g:ycm_python_binary_path = '/usb/bin/python'
+let g:ycm_path_to_python_interpreter="/usr/bin/python"
 " Set vim-gitgutter updatetime
 set updatetime=1000
 
@@ -570,5 +570,7 @@ autocmd BufNewFile,BufRead *.sh setf sh
 autocmd BufNewFile,BufRead *.css setf css
 
 " Autoformat
-noremap <F1> :Autoformat<CR>
-noremap [23~ :Autoformat<CR>
+noremap <F2> :Autoformat<CR>
+noremap [24~ :Autoformat<CR>
+map <F2> :Autoformat<CR>
+map [24~ :Autoformat<CR>
