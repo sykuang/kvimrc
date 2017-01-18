@@ -112,7 +112,8 @@ Plug 'hari-rangarajan/CCTree',{'for':['c','cpp']}
 Plug 'rust-lang/rust.vim'
 Plug 'wesleyche/Trinity'
 Plug 'wesleyche/SrcExpl', { 'on': 'SrcExplToggle' }
-Plug 'taglist.vim'
+" taglist
+Plug 'taglist.vim', { 'on': 'TlistToggle' }
 " vim-localvimrc
 Plug 'embear/vim-localvimrc'
 " vimspell
@@ -121,6 +122,8 @@ Plug 'vimspell'
 Plug 'mbbill/undotree'
 " Mark
 Plug 'Yggdroot/vim-mark'
+" Ack code search (requires ack installed in the system)
+Plug 'mileszs/ack.vim'
 
 call plug#end()
 " ============================================================================
@@ -133,7 +136,10 @@ endif
 
 " ============================================================================
 " Vim settings and mappings
-" You can edit them as you wish
+
+" Let backspace can move from current line
+"  reference http://vim.wikia.com/wiki/Backspace_and_delete_problems
+set backspace=indent,eol,start
 
 " no vi-compatible
 set nocompatible
@@ -260,10 +266,15 @@ endif
 " Edit them as you wish.
 
 " Taglist -----------------------------
+"let Tlist_Use_Right_Window = 1
+let Tlist_Exit_OnlyWindow = 1
+let Tlist_Show_One_File = 1
+let Tlist_Sort_Type = "order"
+"let Tlist_GainFocus_On_ToggleOpen=1
 
-" toggle tagbar display
+" toggle taglist display
 map <F4> :TlistToggle<CR>
-map [26~ :TlistToggle<CR>
+map [30~ :TlistToggle<CR>
 
 " autofocus on tagbar open
 let g:tagbar_autofocus = 1
@@ -328,9 +339,9 @@ nmap ,wc :call CtrlPWithSearchText(expand('<cword>'), 'CmdPalette')<CR>
 let g:ctrlp_working_path_mode = 'ra'
 " ignore these files and folders on file finder
 let g:ctrlp_custom_ignore = {
-            \ 'dir':  '\v[\/](\.git|\.hg|\.svn)$',
-            \ 'file': '\.pyc$\|\.pyo$\|\.o$\|\.o.cmd\|\.log$\|\.ko$\',
-            \ }
+  \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules)$',
+  \ 'file': '\.pyc$\|\.pyo$',
+  \ }
 let g:ctrlp_use_caching = 1
 let g:ctrlp_max_files = 20000
 let g:ctrlp_root_markers = ['.ctrlp']
@@ -574,3 +585,6 @@ noremap <F2> :Autoformat<CR>
 noremap [24~ :Autoformat<CR>
 map <F2> :Autoformat<CR>
 map [24~ :Autoformat<CR>
+" simple recursive grep
+nmap ,r :Ack
+nmap ,wr :Ack <cword><CR>
