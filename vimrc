@@ -340,7 +340,7 @@ let g:ctrlp_working_path_mode = 'ra'
 " ignore these files and folders on file finder
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules)$',
-  \ 'file': '\.pyc$\|\.pyo$',
+  \ 'file': '\v\.(pyc|pyo|o|out|files)$|tags',
   \ }
 let g:ctrlp_use_caching = 1
 let g:ctrlp_max_files = 20000
@@ -585,6 +585,10 @@ noremap <F2> :Autoformat<CR>
 noremap [24~ :Autoformat<CR>
 map <F2> :Autoformat<CR>
 map [24~ :Autoformat<CR>
+
 " simple recursive grep
 nmap ,r :Ack
 nmap ,wr :Ack <cword><CR>
+
+" nerdcommenter
+let g:NERDAltDelims_c = 1
