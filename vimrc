@@ -65,12 +65,16 @@ Plug 'michaeljsmith/vim-indent-object'
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
 " operators, highlighting, run and ipdb breakpoints)
 Plug 'klen/python-mode',{'for': ['python'] }
-"Better autocompletion
-Plug 'Shougo/neocomplcache.vim',{'for': ['sh']}
 " YouCompleteMe
+if v:version > 704 || (v:version == 704 && has('patch143'))
 Plug 'Valloric/YouCompleteMe',{ 'do': 'YCM_CORES=2 ./install.py --clang-completer' }
 Plug 'davidhalter/jedi'
 Plug 'kenkuang1213/YCM-Generator',{'branch':'stable'}
+"Better autocompletion
+Plug 'Shougo/neocomplcache.vim',{'for': ['sh']}
+else
+Plug 'Shougo/neocomplcache.vim'
+endif
 " Snippets manager (SnipMate), dependencies, and snippets repo
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
@@ -587,6 +591,7 @@ map <F2> :Autoformat<CR>
 map [24~ :Autoformat<CR>
 
 " simple recursive grep
+let g:ackprg = 'ag --nogroup --nocolor --column'
 nmap ,r :Ack
 nmap ,wr :Ack <cword><CR>
 
