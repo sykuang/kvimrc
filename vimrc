@@ -69,15 +69,16 @@ Plug 'Valloric/YouCompleteMe',{ 'do': 'YCM_CORES=2 ./install.py --clang-complete
 Plug 'davidhalter/jedi'
 Plug 'kenkuang1213/YCM-Generator',{'branch':'stable'}
 "Better autocompletion
-Plug 'Shougo/neocomplcache.vim',{'for': ['sh']}
+Plug 'Shougo/neocomplcache.vim',{'for': ['shell']}
 else
 Plug 'Shougo/neocomplcache.vim'
 endif
 " Snippets manager (SnipMate), dependencies, and snippets repo
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
-Plug 'honza/vim-snippets'
-Plug 'garbas/vim-snipmate'
+Plug 'MarcWeber/vim-addon-mw-utils', { 'for': ['html', 'htmldjango', 'javascript'] }
+Plug 'tomtom/tlib_vim', { 'for': ['html', 'htmldjango', 'javascript'] }
+Plug 'honza/vim-snippets', { 'for': ['html', 'htmldjango', 'javascript'] }
+Plug 'garbas/vim-snipmate', { 'for': ['html', 'htmldjango', 'javascript'] }
+" Git Gutter
 Plug 'airblade/vim-gitgutter'
 " Automatically sort python imports
 Plug 'fisadev/vim-isort',{'for': 'python'}
@@ -110,10 +111,10 @@ Plug 'YankRing.vim'
 Plug 'Chiel92/vim-autoformat'
 " CCTREE
 Plug 'hari-rangarajan/CCTree',{'for':['c','cpp']}
-" rust
-Plug 'rust-lang/rust.vim'
 Plug 'wesleyche/Trinity'
 Plug 'wesleyche/SrcExpl', { 'on': 'SrcExplToggle' }
+" rust
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 " taglist
 Plug 'taglist.vim', { 'on': 'TlistToggle' }
 " vim-localvimrc
@@ -186,7 +187,9 @@ let mapleader=";"
 map tn :tabn<CR>
 map tp :tabp<CR>
 map [1;5C :tabn<CR>
-map [1;5D :tabp<CR>
+imap [1;5C <ESC>:tabn<CR>
+map [1;5D tabp<CR>
+imap [1;5D <ESC>:tabp<CR>
 map tm :tabm
 map tt :tabnew
 map ts :tab split<CR>
@@ -293,8 +296,6 @@ let g:tagbar_autofocus = 1
 " toggle nerdtree display
 map <F3> :NERDTreeToggle<CR>
 map [25~ :NERDTreeToggle<CR>
-" open nerdtree with the current file selected
-nmap ,t :NERDTreeFind<CR>
 " don;t show these file types
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 
@@ -352,7 +353,7 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\v\.(pyc|pyo|o|out|files|doc|xls)$|tags',
   \ }
 let g:ctrlp_use_caching = 1
-let g:ctrlp_max_files = 20000
+let g:ctrlp_max_files = 30000
 let g:ctrlp_root_markers = ['.ctrlp']
 " Syntastic ------------------------------
 
@@ -526,7 +527,7 @@ let g:SrcExpl_pluginList = [
 " // Enable/Disable the local definition searching, and note that this is not
 " // guaranteed to work, the Source Explorer doesn't check the syntax for now.
 " // It only searches for a match with the keyword according to command 'gd'
-let g:SrcExpl_searchLocalDef = 1
+let g:SrcExpl_searchLocalDef = 0
 
 " // Do not let the Source Explorer update the tags file when opening
 let g:SrcExpl_isUpdateTags = 0
@@ -563,7 +564,7 @@ nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 let g:ycm_enable_diagnostic_signs=0
-let g:ycm_python_binary_path = '/usb/bin/python'
+let g:ycm_python_binary_path = '/usr/bin/python'
 let g:ycm_path_to_python_interpreter="/usr/bin/python"
 " Set vim-gitgutter updatetime
 set updatetime=1000
@@ -596,8 +597,9 @@ au CursorHold * checktime
 
 " Set filetype
 autocmd BufNewFile,BufRead *.py setf python
-autocmd BufNewFile,BufRead *.sh setf sh
+autocmd BufNewFile,BufRead *.sh setf shell
 autocmd BufNewFile,BufRead *.css setf css
+autocmd BufNewFile,BufRead *.rs setf rust
 
 
 " simple recursive grep
