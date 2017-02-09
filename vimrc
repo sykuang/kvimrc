@@ -1,6 +1,6 @@
-" Fisa-vim-config
-" http://fisadev.github.io/fisa-vim-config/
-" version: 8.0
+" Ken-vim-config
+" version: 0.1
+" Base on fisa-vim-config
 "
 "
 " ============================================================================
@@ -34,7 +34,7 @@ call plug#begin('~/.vim/plugged')
 " Python and PHP Debugger
 Plug 'fisadev/vim-debug.vim', { 'for': ['py', 'php'] }
 " Better file browser
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'scrooloose/nerdtree'
 " Code commenter
 Plug 'scrooloose/nerdcommenter'
 " Code and files fuzzy finder
@@ -42,11 +42,9 @@ Plug 'kien/ctrlp.vim'
 " Extension to ctrlp, for fuzzy command finder
 Plug 'fisadev/vim-ctrlp-cmdpalette'
 " Zen coding
-Plug 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim', { 'for': ['html', 'htmldjango', 'javascript'] }
 " Git integration
 Plug 'motemen/git-vim'
-" Tab list panel
-Plug 'kien/tabman.vim'
 " Airline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -57,7 +55,7 @@ Plug 'rosenfeld/conque-term'
 " Pending tasks list
 Plug 'fisadev/FixedTaskList.vim'
 " Surround
-Plug 'tpope/vim-surround'
+Plug 'tpope/vim-surround', { 'for': ['html', 'htmldjango', 'javascript'] }
 " Autoclose
 "Plug 'Townk/vim-autoclose'
 " Indent text object
@@ -82,7 +80,7 @@ Plug 'honza/vim-snippets'
 Plug 'garbas/vim-snipmate'
 Plug 'airblade/vim-gitgutter'
 " Automatically sort python imports
-Plug 'fisadev/vim-isort',{'for':'python'}
+Plug 'fisadev/vim-isort',{'for': 'python'}
 " Drag visual blocks arround
 Plug 'fisadev/dragvisuals.vim'
 " Window chooser
@@ -128,6 +126,10 @@ Plug 'mbbill/undotree'
 Plug 'Yggdroot/vim-mark'
 " Ack code search (requires ack installed in the system)
 Plug 'mileszs/ack.vim'
+" True Sublime Text style multiple selections for Vim
+Plug 'terryma/vim-multiple-cursors'
+" Tabline - Configure tabs within Terminal Vim
+Plug 'mkitt/tabline.vim'
 
 call plug#end()
 " ============================================================================
@@ -176,7 +178,10 @@ syntax on
 
 " show line numbers
 set nu
+
+" set leader
 let mapleader=";"
+
 " tab navigation mappings
 map tn :tabn<CR>
 map tp :tabp<CR>
@@ -208,7 +213,7 @@ imap <C-J> <C-X><C-O>
 " Comment this line to enable autocompletion preview window
 " (displays documentation related to the selected completion option)
 " Disabled by default because preview makes the window flicker
-set completeopt-=preview
+"set completeopt-=preview
 
 " save as sudo
 ca w!! w !sudo tee "%"
@@ -344,7 +349,7 @@ let g:ctrlp_working_path_mode = 'ra'
 " ignore these files and folders on file finder
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules)$',
-  \ 'file': '\v\.(pyc|pyo|o|out|files)$|tags',
+  \ 'file': '\v\.(pyc|pyo|o|out|files|doc|xls)$|tags',
   \ }
 let g:ctrlp_use_caching = 1
 let g:ctrlp_max_files = 20000
@@ -450,21 +455,31 @@ let g:choosewin_overlay_enable = 1
 let g:airline_powerline_fonts = 0
 let g:airline_theme = 'bubblegum'
 let g:airline#extensions#whitespace#enabled = 0
-
+let g:airline#extensions#ycm#enabled = 1
+let g:airline#extensions#ycm#error_symbol = 'E:'
+let g:airline#extensions#ycm#warning_symbol = 'W:'
+let g:airline_section_c ="%t%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#"
+set tr
+"let g:airline#extensions#tabline#fnamemod
 " Autoformat
 let g:formatdef_astyle_c = '"astyle --mode=c --style=allman --convert-tabs --indent=spaces=4 --break-blocks --add-brackets"'
 let g:formatters_c =['astyle_c']
 let g:autoformat_verbosemode = 1
-" cscope shortcut
+noremap ,ff :Autoformat<CR>
+noremap ,ff :Autoformat<CR>
+map ,ff :Autoformat<CR>
+map ,ff :Autoformat<CR>
 
-nmap <C-_>s :cs find s <C-R>=expand("<cword>")<CR><CR>
-nmap <C-_>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-nmap <C-_>c :cs find c <C-R>=expand("<cword>")<CR><CR>
-nmap <C-_>t :cs find t <C-R>=expand("<cword>")<CR><CR>
-nmap <C-_>e :cs find e <C-R>=expand("<cword>")<CR><CR>
-nmap <C-_>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-nmap <C-_>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+" cscope shortcut
+nmap <leader>bs :cs find s <C-R>=expand("<cword>")<CR><CR>
+nmap <leader>bg :cs find g <C-R>=expand("<cword>")<CR><CR>
+nmap <leader>bc :cs find c <C-R>=expand("<cword>")<CR><CR>
+nmap <leader>bt :cs find t <C-R>=expand("<cword>")<CR><CR>
+nmap <leader>be :cs find e <C-R>=expand("<cword>")<CR><CR>
+nmap <leader>bf :cs find f <C-R>=expand("<cfile>")<CR><CR>
+nmap <leader>bi :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
+nmap <leader>bd :cs find d <C-R>=expand("<cword>")<CR><CR>
+set cst
 " to use fancy symbols for airline, uncomment the following lines and use a
 " patched font (more info on the README.rst)
 "if !exists('g:airline_symbols')
@@ -584,11 +599,6 @@ autocmd BufNewFile,BufRead *.py setf python
 autocmd BufNewFile,BufRead *.sh setf sh
 autocmd BufNewFile,BufRead *.css setf css
 
-" Autoformat
-noremap <F2> :Autoformat<CR>
-noremap [24~ :Autoformat<CR>
-map <F2> :Autoformat<CR>
-map [24~ :Autoformat<CR>
 
 " simple recursive grep
 let g:ackprg = 'ag --nogroup --nocolor --column'
