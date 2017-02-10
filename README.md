@@ -1,20 +1,20 @@
 - Pre-Installation
-    1. Install pip 
+    1. Install pip
         ```
-        curl https://bootstrap.pypa.io/get-pip.py | python -  --user 
+        curl https://bootstrap.pypa.io/get-pip.py | python -  --user
         ```
-    2. Install python modules by pip 
+    2. Install python modules by pip
         ```
-        sudo pip install dbgp vim-debug pep8 flake8 pyflakes isort autopep8 
+        sudo pip install dbgp vim-debug pep8 flake8 pyflakes isort autopep8
         ```
         To speedup startup time of vim, it's recommended to install pyOpenSSL
         ```
         pip install --user pyOpenSSL
         ```
-    3. Install ctags and other application 
+    3. Install ctags and other application
         * Ubuntu
         ```
-        sudo apt-get install exuberant-ctags git astyle 
+        sudo apt-get install exuberant-ctags git astyle
         ```
         * OS X
         ```
@@ -28,7 +28,7 @@
         - leader key is `;`
     2. AutoForamt
        - `,ff` for Auto Format
-    3. cscope 
+    3. cscope
        * `<leader>bs` :cs find s Current Word
        * `<leader>bg` :cs find g Current Word
        * `<leader>bc` :cs find c Current Word
@@ -82,7 +82,7 @@
 
         Switches to the alternative set of delimiters.
 
-        * `[count]<leader>cl`  
+        * `[count]<leader>cl`
         `[count]<leader>cb` **|NERDComAlignedComment|**
 
         Same as **|NERDComComment|** except that the delimiters are aligned down the left side (`<leader>cl`) or both sides (`<leader>cb`).
@@ -92,8 +92,10 @@
         Uncomments the selected line(s).
     5. spellcheck
         * `shift + F7`
-        
+    6. Youcomplete
+        * Enable youcomplete `<leader>ly`
+
 - Usage
     For more usage, you can refer (https://github.com/fisadev/fisa-vim-config/blob/master/docs/features.rst)
-    
+
 Branch from :[fisa-vim-config](https://github.com/fisadev/fisa-vim-config)

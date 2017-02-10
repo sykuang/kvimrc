@@ -562,10 +562,10 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 "Set YouCompleteMe
 function! Load_ycm()
-                 call plug#load('YouCompleteMe')     
-                 if exists('g:loaded_youcompleteme') 
-                   call youcompleteme#Enable()       
-                 endif                               
+    call plug#load('YouCompleteMe')
+    if exists('g:loaded_youcompleteme')
+        call youcompleteme#Enable()
+    endif
 endfunction
 let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
