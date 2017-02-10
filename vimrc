@@ -65,7 +65,12 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'klen/python-mode',{'for': ['python'] }
 " YouCompleteMe
 if v:version > 704 || (v:version == 704 && has('patch143'))
-Plug 'Valloric/YouCompleteMe',{ 'do': 'YCM_CORES=2 ./install.py --clang-completer' }
+function! YCMInstall(info)
+    if a:info.status == 'installed'
+        !./install.sh --clang-completer
+    endif
+endfunction
+Plug 'Valloric/YouCompleteMe',{ 'on': [], 'do':  function('YCMInstall') }
 Plug 'davidhalter/jedi'
 Plug 'kenkuang1213/YCM-Generator',{'branch':'stable'}
 "Better autocompletion
@@ -555,8 +560,13 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
-
 "Set YouCompleteMe
+function! Load_ycm()
+                 call plug#load('YouCompleteMe')     
+                 if exists('g:loaded_youcompleteme') 
+                   call youcompleteme#Enable()       
+                 endif                               
+endfunction
 let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_filepath_completion_use_working_dir = 1
@@ -566,6 +576,7 @@ nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 let g:ycm_enable_diagnostic_signs=0
 let g:ycm_python_binary_path = '/usr/bin/python'
 let g:ycm_path_to_python_interpreter="/usr/bin/python"
+nmap <leader>ly :call Load_ycm()<CR>
 " Set vim-gitgutter updatetime
 set updatetime=1000
 

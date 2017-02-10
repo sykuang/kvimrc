@@ -1,11 +1,15 @@
 - Pre-Installation
-    1. Istall pip 
+    1. Install pip 
         ```
-        curl https://bootstrap.pypa.io/get-pip.py | sudo python - 
+        curl https://bootstrap.pypa.io/get-pip.py | python -  --user 
         ```
-    2. Istall python modules by pip 
+    2. Install python modules by pip 
         ```
         sudo pip install dbgp vim-debug pep8 flake8 pyflakes isort autopep8 
+        ```
+        To speedup startup time of vim, it's recommended to install pyOpenSSL
+        ```
+        pip install --user pyOpenSSL
         ```
     3. Install ctags and other application 
         * Ubuntu
