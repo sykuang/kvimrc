@@ -121,7 +121,7 @@ Plug 'wesleyche/SrcExpl', { 'on': 'SrcExplToggle' }
 " rust
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 " taglist
-Plug 'taglist.vim', { 'on': 'TlistToggle' }
+Plug 'majutsushi/tagbar'
 " vim-localvimrc
 Plug 'embear/vim-localvimrc'
 " vimspell
@@ -136,6 +136,8 @@ Plug 'mileszs/ack.vim'
 Plug 'terryma/vim-multiple-cursors'
 " Tabline - Configure tabs within Terminal Vim
 Plug 'mkitt/tabline.vim'
+" Automatic dynamic cscope updates for Vim
+Plug 'erig0/cscope_dynamic', { 'do': 'make vimball'}
 
 call plug#end()
 " ============================================================================
@@ -193,7 +195,7 @@ map tn :tabn<CR>
 map tp :tabp<CR>
 map [1;5C :tabn<CR>
 imap [1;5C <ESC>:tabn<CR>
-map [1;5D tabp<CR>
+map [1;5D :tabp<CR>
 imap [1;5D <ESC>:tabp<CR>
 map tm :tabm
 map tt :tabnew
@@ -290,12 +292,13 @@ let Tlist_Sort_Type = "order"
 "let Tlist_GainFocus_On_ToggleOpen=1
 
 " toggle taglist display
-map <F4> :TlistToggle<CR>
-map [30~ :TlistToggle<CR>
+map <F4> :TagbarToggle<CR>
+map [30~ :Tagbaroggle<CR>
 
 " autofocus on tagbar open
 let g:tagbar_autofocus = 1
-
+let g:airline#extensions#tagbar#enabled = 1
+let g:tagbar_left = 1
 " NERDTree -----------------------------
 
 " toggle nerdtree display
@@ -620,3 +623,5 @@ nmap ,wr :Ack <cword><CR>
 
 " nerdcommenter
 let g:NERDAltDelims_c = 1
+
+nmap <leader>lc <Plug>CscopeDBInit
