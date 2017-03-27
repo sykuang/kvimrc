@@ -21,8 +21,7 @@
         brew install ctags astyle
         ```
 - Installation
-    1. ` git clone https://github.com/kenkuang1213/kvimrc.git $HOME/.kvimrc`
-    2. ` ln $HOME/.kvimrc/vimrc $HOME/.vimrc `
+    * ` git clone https://github.com/sykuang/kvimrc.git $HOME/.kvimrc;ln $HOME/.kvimrc/vimrc $HOME/.vimrc `
 - HotKey
     1. `<leader`>
         - leader key is `;`
