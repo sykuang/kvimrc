@@ -136,9 +136,10 @@ Plug 'mileszs/ack.vim'
 Plug 'terryma/vim-multiple-cursors'
 " Tabline - Configure tabs within Terminal Vim
 Plug 'mkitt/tabline.vim'
-" Automatic dynamic cscope updates for Vim
-Plug 'erig0/cscope_dynamic', { 'do': 'make vimball'}
-
+" A vim plugin to help you to create/update cscope database and connect to existing proper database automatically. 
+Plug 'brookhong/cscope.vim'
+" A vim plugin to display the indention levels with thin vertical lines
+Plug 'Yggdroot/indentLine'
 call plug#end()
 " ============================================================================
 " Install plugins the first time vim runs
@@ -358,7 +359,7 @@ let g:ctrlp_working_path_mode = 'ra'
 " ignore these files and folders on file finder
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules)$',
-  \ 'file': '\v\.(pyc|pyo|o|out|files|doc|xls)$|tags',
+  \ 'file': '\v\.(pyc|pyo|o|out|files|doc|xls|mk|txt|xlsx|Kconfig|tmp)$|tags',
   \ }
 let g:ctrlp_use_caching = 1
 let g:ctrlp_max_files = 30000
@@ -480,14 +481,27 @@ map ,ff :Autoformat<CR>
 map ,ff :Autoformat<CR>
 
 " cscope shortcut
-nmap <leader>bs :cs find s <C-R>=expand("<cword>")<CR><CR>
-nmap <leader>bg :cs find g <C-R>=expand("<cword>")<CR><CR>
-nmap <leader>bc :cs find c <C-R>=expand("<cword>")<CR><CR>
-nmap <leader>bt :cs find t <C-R>=expand("<cword>")<CR><CR>
-nmap <leader>be :cs find e <C-R>=expand("<cword>")<CR><CR>
-nmap <leader>bf :cs find f <C-R>=expand("<cfile>")<CR><CR>
-nmap <leader>bi :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
-nmap <leader>bd :cs find d <C-R>=expand("<cword>")<CR><CR>
+nnoremap <leader>fa :call CscopeFindInteractive(expand('<cword>'))<CR>
+nnoremap <leader>l :call ToggleLocationList()<CR>
+" s: Find this C symbol
+nnoremap  <leader>fs :call CscopeFind('s', expand('<cword>'))<CR>
+" g: Find this definition
+nnoremap  <leader>fg :call CscopeFind('g', expand('<cword>'))<CR>
+" d: Find functions called by this function
+nnoremap  <leader>fd :call CscopeFind('d', expand('<cword>'))<CR>
+" c: Find functions calling this function
+nnoremap  <leader>fc :call CscopeFind('c', expand('<cword>'))<CR>
+" t: Find this text string
+nnoremap  <leader>ft :call CscopeFind('t', expand('<cword>'))<CR>
+" e: Find this egrep pattern
+nnoremap  <leader>fe :call CscopeFind('e', expand('<cword>'))<CR>
+" f: Find this file
+nnoremap  <leader>ff :call CscopeFind('f', expand('<cword>'))<CR>
+" i: Find files #including this file
+nnoremap  <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
+" set g:cscope_silent
+let g:cscope_silent=1
+
 set cst
 " to use fancy symbols for airline, uncomment the following lines and use a
 " patched font (more info on the README.rst)
@@ -625,3 +639,6 @@ nmap ,wr :Ack <cword><CR>
 let g:NERDAltDelims_c = 1
 
 nmap <leader>lc <Plug>CscopeDBInit
+" Set fold method
+set foldmethod=indent
+set nofoldenable
