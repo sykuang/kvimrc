@@ -476,8 +476,6 @@ let g:formatdef_astyle_c = '"astyle --mode=c --style=allman --convert-tabs --ind
 let g:formatters_c =['astyle_c']
 let g:autoformat_verbosemode = 1
 noremap ,ff :Autoformat<CR>
-noremap ,ff :Autoformat<CR>
-map ,ff :Autoformat<CR>
 map ,ff :Autoformat<CR>
 
 " cscope shortcut
@@ -638,7 +636,8 @@ nmap ,wr :Ack <cword><CR>
 " nerdcommenter
 let g:NERDAltDelims_c = 1
 
-nmap <leader>lc <Plug>CscopeDBInit
 " Set fold method
 set foldmethod=indent
 set nofoldenable
+" Quick Preview window
+nnoremap  <leader>sp [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR> 
