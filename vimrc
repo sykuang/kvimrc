@@ -105,13 +105,13 @@ Plug 'lilydjwg/colorizer',{'for': ['css'] }
 " Plugins from vim-scripts repos:
 
 " Search results counter
-Plug 'IndexedSearch'
+Plug 'vim-scripts/IndexedSearch'
 " XML/HTML tags navigation
-Plug 'matchit.zip', { 'for': ['xml', 'htmp'] }
+Plug 'vim-scripts/matchit.zip', { 'for': ['xml', 'htmp'] }
 " Gvim colorscheme
-Plug 'Wombat'
+Plug 'vim-scripts/Wombat'
 " Yank history navigation
-Plug 'YankRing.vim'
+Plug 'vim-scripts/YankRing.vim'
 " Auto formater
 Plug 'Chiel92/vim-autoformat'
 " CCTREE
@@ -125,7 +125,7 @@ Plug 'majutsushi/tagbar'
 " vim-localvimrc
 Plug 'embear/vim-localvimrc'
 " vimspell
-Plug 'vimspell'
+Plug 'vim-scripts/vimspell'
 " Undo tree
 Plug 'mbbill/undotree'
 " Mark
