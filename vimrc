@@ -140,6 +140,10 @@ Plug 'mkitt/tabline.vim'
 Plug 'brookhong/cscope.vim'
 " A vim plugin to display the indention levels with thin vertical lines
 Plug 'Yggdroot/indentLine'
+" Speed up Vim by updating folds only when called-for.
+Plug 'Konfekt/FastFold'
+" No-BS Python code folding for Vim
+Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
 call plug#end()
 " ============================================================================
 " Install plugins the first time vim runs
@@ -425,7 +429,7 @@ let g:tabman_focus  = 'tf'
 " Autoclose ------------------------------
 
 " Fix to let ESC work as espected with Autoclose plugin
-let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
+"let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 
 " DragVisuals ------------------------------
 
@@ -472,11 +476,12 @@ let g:airline_section_c ="%t%m %#__accent_red#%{airline#util#wrap(airline#parts#
 set tr
 "let g:airline#extensions#tabline#fnamemod
 " Autoformat
-let g:formatdef_astyle_c = '"astyle --mode=c --style=allman --convert-tabs --indent=spaces=4 --break-blocks --add-brackets"'
+let g:formatdef_astyle_c = '"astyle --mode=c --style=allman --convert-tabs --indent=spaces=4 --break-blocks --add-brackets --lineend=linux --pad-oper"'
 let g:formatters_c =['astyle_c']
 let g:autoformat_verbosemode = 1
-noremap ,ff :Autoformat<CR>
-map ,ff :Autoformat<CR>
+let g:formatdef_autopep8 = "'autopep8 - --range '.a:firstline.' '.a:lastline"
+noremap ,af :Autoformat<CR>
+map ,af :Autoformat<CR>
 
 " cscope shortcut
 nnoremap <leader>fa :call CscopeFindInteractive(expand('<cword>'))<CR>
@@ -499,7 +504,8 @@ nnoremap  <leader>ff :call CscopeFind('f', expand('<cword>'))<CR>
 nnoremap  <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
 " set g:cscope_silent
 let g:cscope_silent=1
-
+nmap cn :cnext<CR>
+nmap cp :cprevious<CR>
 set cst
 " to use fancy symbols for airline, uncomment the following lines and use a
 " patched font (more info on the README.rst)
@@ -636,8 +642,14 @@ nmap ,wr :Ack <cword><CR>
 " nerdcommenter
 let g:NERDAltDelims_c = 1
 
-" Set fold method
-set foldmethod=indent
-set nofoldenable
 " Quick Preview window
 nnoremap  <leader>sp [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR> 
+
+" FastFold
+let g:tex_fold_enabled=1
+"let g:vimsyn_folding='af'
+let g:xml_syntax_folding = 1
+let g:php_folding = 1
+let g:perl_fold = 1
+let g:fastfold_fold_command_suffixes = []
+set nofoldenable 
