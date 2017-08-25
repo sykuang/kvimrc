@@ -62,12 +62,12 @@ Plug 'tpope/vim-surround', { 'for': ['html', 'htmldjango', 'javascript'] }
 Plug 'michaeljsmith/vim-indent-object'
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
 " operators, highlighting, run and ipdb breakpoints)
-Plug 'klen/python-mode',{'for': ['python'] }
+Plug 'python-mode/python-mode',{'for': ['python'] }
 " YouCompleteMe
 if v:version > 704 || (v:version == 704 && has('patch143'))
 function! YCMInstall(info)
     if a:info.status == 'installed'
-        !./install.sh --clang-completer
+        !./install.sh --all
     endif
 endfunction
 Plug 'Valloric/YouCompleteMe',{ 'on': [], 'do':  function('YCMInstall') }
@@ -112,6 +112,10 @@ Plug 'vim-scripts/matchit.zip', { 'for': ['xml', 'htmp'] }
 Plug 'vim-scripts/Wombat'
 " Yank history navigation
 Plug 'vim-scripts/YankRing.vim'
+" vimspell
+Plug 'vim-scripts/vimspell'
+" Tabular
+Plug 'vim-scripts/Tabular'
 " Auto formater
 Plug 'Chiel92/vim-autoformat'
 " CCTREE
@@ -124,8 +128,6 @@ Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 Plug 'majutsushi/tagbar'
 " vim-localvimrc
 Plug 'embear/vim-localvimrc'
-" vimspell
-Plug 'vim-scripts/vimspell'
 " Undo tree
 Plug 'mbbill/undotree'
 " Mark
@@ -144,6 +146,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'Konfekt/FastFold'
 " No-BS Python code folding for Vim
 Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
+Plug 'plasticboy/vim-markdown'
 call plug#end()
 " ============================================================================
 " Install plugins the first time vim runs
@@ -420,6 +423,9 @@ let g:ctrlp_root_markers = ['.ctrlp']
 "let g:neocomplcache_same_filetype_lists = {}
 "let g:neocomplcache_same_filetype_lists._ = '_'
 
+" YouCompleteMe
+let g:ycm_autoclose_preview_window_after_completion = 1
+
 " TabMan ------------------------------
 
 " mappings to toggle display, and to focus on it
@@ -595,8 +601,8 @@ nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 let g:ycm_enable_diagnostic_signs=0
-let g:ycm_python_binary_path = '/usr/bin/python'
-let g:ycm_path_to_python_interpreter="/usr/bin/python"
+"let g:ycm_python_binary_path = '/usr/bin/python'
+"let g:ycm_path_to_python_interpreter="/usr/bin/python"
 nmap <leader>ly :call Load_ycm()<CR>
 " Set vim-gitgutter updatetime
 set updatetime=1000
@@ -652,4 +658,11 @@ let g:xml_syntax_folding = 1
 let g:php_folding = 1
 let g:perl_fold = 1
 let g:fastfold_fold_command_suffixes = []
-set nofoldenable 
+set nofoldenable
+" Tabular
+if exists(":Tabularize")
+    nmap <Leader>a= :Tabularize /=<CR>
+    vmap <Leader>a= :Tabularize /=<CR>
+    nmap <Leader>a: :Tabularize /:\zs<CR>
+    vmap <Leader>a: :Tabularize /:\zs<CR>
+endif
