@@ -65,18 +65,18 @@ Plug 'michaeljsmith/vim-indent-object'
 Plug 'python-mode/python-mode',{'for': ['python'] }
 " YouCompleteMe
 if v:version > 704 || (v:version == 704 && has('patch143'))
-function! YCMInstall(info)
-    if a:info.status == 'installed'
-        !./install.sh --all
-    endif
-endfunction
-Plug 'Valloric/YouCompleteMe',{ 'on': [], 'do':  function('YCMInstall') }
-Plug 'davidhalter/jedi'
-Plug 'kenkuang1213/YCM-Generator',{'branch':'stable'}
-"Better autocompletion
-Plug 'Shougo/neocomplcache.vim',{'for': ['shell']}
+    function! YCMInstall(info)
+        if a:info.status == 'installed'
+            !./install.sh --all
+        endif
+    endfunction
+    Plug 'Valloric/YouCompleteMe',{ 'on': [], 'do':  function('YCMInstall') }
+    Plug 'davidhalter/jedi'
+    Plug 'kenkuang1213/YCM-Generator',{'branch':'stable'}
+    "Better autocompletion
+    Plug 'Shougo/neocomplcache.vim',{'for': ['sh']}
 else
-Plug 'Shougo/neocomplcache.vim'
+    Plug 'Shougo/neocomplcache.vim'
 endif
 " Snippets manager (SnipMate), dependencies, and snippets repo
 Plug 'MarcWeber/vim-addon-mw-utils', { 'for': ['html', 'htmldjango', 'javascript'] }
@@ -107,7 +107,7 @@ Plug 'lilydjwg/colorizer',{'for': ['css'] }
 " Search results counter
 Plug 'vim-scripts/IndexedSearch'
 " XML/HTML tags navigation
-Plug 'vim-scripts/matchit.zip', { 'for': ['xml', 'htmp'] }
+Plug 'vim-scripts/matchit.zip', { 'for': ['xml', 'html'] }
 " Gvim colorscheme
 Plug 'vim-scripts/Wombat'
 " Yank history navigation
@@ -116,6 +116,8 @@ Plug 'vim-scripts/YankRing.vim'
 Plug 'vim-scripts/vimspell'
 " Tabular
 Plug 'vim-scripts/Tabular'
+" DoxygenToolkit.vim
+Plug 'vim-scripts/DoxygenToolkit.vim'
 " Auto formater
 Plug 'Chiel92/vim-autoformat'
 " CCTREE
@@ -124,10 +126,8 @@ Plug 'wesleyche/Trinity'
 Plug 'wesleyche/SrcExpl', { 'on': 'SrcExplToggle' }
 " rust
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
-" taglist
+" tagbar
 Plug 'majutsushi/tagbar'
-" vim-localvimrc
-Plug 'embear/vim-localvimrc'
 " Undo tree
 Plug 'mbbill/undotree'
 " Mark
@@ -138,15 +138,16 @@ Plug 'mileszs/ack.vim'
 Plug 'terryma/vim-multiple-cursors'
 " Tabline - Configure tabs within Terminal Vim
 Plug 'mkitt/tabline.vim'
-" A vim plugin to help you to create/update cscope database and connect to existing proper database automatically. 
-Plug 'brookhong/cscope.vim'
+" A vim plugin to help you to create/update cscope database and connect to existing proper database automatically.
+Plug 'brookhong/cscope.vim', { 'for': ['c','cpp']}
 " A vim plugin to display the indention levels with thin vertical lines
 Plug 'Yggdroot/indentLine'
 " Speed up Vim by updating folds only when called-for.
 Plug 'Konfekt/FastFold'
 " No-BS Python code folding for Vim
 Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
-Plug 'plasticboy/vim-markdown'
+" Markdown Vim Mode
+Plug 'plasticboy/vim-markdown', { 'for': 'markdown'}
 call plug#end()
 " ============================================================================
 " Install plugins the first time vim runs
@@ -188,7 +189,8 @@ set ls=2
 set incsearch
 " highlighted search results
 set hlsearch
-
+" ignore search case
+set ignorecase
 " syntax highlight on
 syntax on
 
@@ -365,9 +367,9 @@ nmap ,wc :call CtrlPWithSearchText(expand('<cword>'), 'CmdPalette')<CR>
 let g:ctrlp_working_path_mode = 'ra'
 " ignore these files and folders on file finder
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules)$',
-  \ 'file': '\v\.(pyc|pyo|o|out|files|doc|xls|mk|txt|xlsx|Kconfig|tmp)$|tags',
-  \ }
+            \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules)$',
+            \ 'file': '\v\.(pyc|pyo|o|out|files|doc|xls|mk|txt|xlsx|Kconfig|tmp)$|tags',
+            \ }
 let g:ctrlp_use_caching = 1
 let g:ctrlp_max_files = 30000
 let g:ctrlp_root_markers = ['.ctrlp']
@@ -394,7 +396,7 @@ let g:ctrlp_root_markers = ['.ctrlp']
 " don't fold python code on open
 "let g:pymode_folding = 0
 " don't load rope by default. Change to 1 to use rope
-"let g:pymode_rope = 0
+let g:pymode_rope = 0
 " open definitions on same window, and custom mappings for definitions and
 " occurrences
 "let g:pymode_rope_goto_definition_bind = ',d'
@@ -407,30 +409,25 @@ let g:ctrlp_root_markers = ['.ctrlp']
 " most of them not documented because I'm not sure how they work
 " (docs aren't good, had to do a lot of trial and error to make
 " it play nice)
-"let g:neocomplcache_enable_at_startup = 1
-"let g:neocomplcache_enable_ignore_case = 1
-"let g:neocomplcache_enable_smart_case = 1
+let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_enable_ignore_case = 1
+let g:neocomplcache_enable_smart_case = 1
 "let g:neocomplcache_enable_auto_select = 1
-"let g:neocomplcache_enable_fuzzy_completion = 1
+let g:neocomplcache_enable_fuzzy_completion = 1
 "let g:neocomplcache_enable_camel_case_completion = 1
 "let g:neocomplcache_enable_underbar_completion = 1
 "let g:neocomplcache_fuzzy_completion_start_length = 1
 "let g:neocomplcache_auto_completion_start_length = 1
 "let g:neocomplcache_manual_completion_start_length = 1
-"let g:neocomplcache_min_keyword_length = 1
-"let g:neocomplcache_min_syntax_length = 1
+let g:neocomplcache_min_keyword_length = 1
+let g:neocomplcache_min_syntax_length = 1
 "complete with workds from any opened file
 "let g:neocomplcache_same_filetype_lists = {}
 "let g:neocomplcache_same_filetype_lists._ = '_'
 
 " YouCompleteMe
 let g:ycm_autoclose_preview_window_after_completion = 1
-
-" TabMan ------------------------------
-
-" mappings to toggle display, and to focus on it
-let g:tabman_toggle = 'tl'
-let g:tabman_focus  = 'tf'
+let g:ycm_autoclose_preview_window_after_insertion = 1
 
 " Autoclose ------------------------------
 
@@ -589,9 +586,11 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 "Set YouCompleteMe
 function! Load_ycm()
-    call plug#load('YouCompleteMe')
-    if exists('g:loaded_youcompleteme')
-        call youcompleteme#Enable()
+    if (&ft=='c' || &ft=='cpp' || &ft=='python')
+        call plug#load('YouCompleteMe')
+        if exists('g:loaded_youcompleteme')
+            call youcompleteme#Enable()
+        endif
     endif
 endfunction
 let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
@@ -634,8 +633,6 @@ set autoread"
 au CursorHold * checktime
 
 " Set filetype
-autocmd BufNewFile,BufRead *.py setf python
-autocmd BufNewFile,BufRead *.sh setf shell
 autocmd BufNewFile,BufRead *.css setf css
 autocmd BufNewFile,BufRead *.rs setf rust
 
@@ -649,7 +646,7 @@ nmap ,wr :Ack <cword><CR>
 let g:NERDAltDelims_c = 1
 
 " Quick Preview window
-nnoremap  <leader>sp [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR> 
+nnoremap  <leader>sp [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
 
 " FastFold
 let g:tex_fold_enabled=1
@@ -666,3 +663,4 @@ if exists(":Tabularize")
     nmap <Leader>a: :Tabularize /:\zs<CR>
     vmap <Leader>a: :Tabularize /:\zs<CR>
 endif
+nnoremap <leader>d :Dox<CR>
