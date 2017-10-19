@@ -139,7 +139,7 @@ Plug 'terryma/vim-multiple-cursors'
 " Tabline - Configure tabs within Terminal Vim
 Plug 'mkitt/tabline.vim'
 " A vim plugin to help you to create/update cscope database and connect to existing proper database automatically.
-Plug 'brookhong/cscope.vim', { 'for': ['c','cpp']}
+Plug 'brookhong/cscope.vim', { 'for': ['c','cpp','asm']}
 " A vim plugin to display the indention levels with thin vertical lines
 Plug 'Yggdroot/indentLine'
 " Speed up Vim by updating folds only when called-for.
@@ -480,7 +480,7 @@ set tr
 "let g:airline#extensions#tabline#fnamemod
 " Autoformat
 let g:formatdef_astyle_c = '"astyle --mode=c --style=allman --convert-tabs --indent=spaces=4 --break-blocks --add-brackets --lineend=linux --pad-oper"'
-let g:formatters_c =['astyle_c']
+let g:formatters_c =['clangformat']
 let g:autoformat_verbosemode = 1
 let g:formatdef_autopep8 = "'autopep8 - --range '.a:firstline.' '.a:lastline"
 noremap ,af :Autoformat<CR>
@@ -664,3 +664,23 @@ if exists(":Tabularize")
     vmap <Leader>a: :Tabularize /:\zs<CR>
 endif
 nnoremap <leader>d :Dox<CR>
+if has("autocmd")
+    autocmd BufRead *.txt set tw=78
+    autocmd BufReadPost *
+                \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+                \   exe "normal g'\"" |
+                \ endif
+endif
+
+let g:hlsearch = 1
+function! TogglehlSearch()
+    if (g:hlsearch==1)
+        set nohlsearch
+        let g:hlsearch =0
+    else
+        set hlsearch
+        let g:hlsearch =1
+    endif
+endfunction
+
+nmap ,hl :call TogglehlSearch()<CR>
