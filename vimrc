@@ -148,6 +148,7 @@ Plug 'Konfekt/FastFold'
 Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
 " Markdown Vim Mode
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown'}
+Plug 'FredKSchott/CoVim'
 call plug#end()
 " ============================================================================
 " Install plugins the first time vim runs
@@ -234,7 +235,6 @@ imap <C-J> <C-X><C-O>
 " (displays documentation related to the selected completion option)
 " Disabled by default because preview makes the window flicker
 "set completeopt-=preview
-
 " save as sudo
 ca w!! w !sudo tee "%"
 
@@ -428,7 +428,15 @@ let g:neocomplcache_min_syntax_length = 1
 " YouCompleteMe
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
-
+let g:ycm_cache_omnifunc=0
+let g:ycm_seed_identifiers_with_syntax=1
+" AutoComplete
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+set completeopt=longest,menu
+inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
+inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
 " Autoclose ------------------------------
 
 " Fix to let ESC work as espected with Autoclose plugin
