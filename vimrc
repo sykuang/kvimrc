@@ -117,7 +117,7 @@ Plug 'vim-scripts/vimspell'
 " Tabular
 Plug 'vim-scripts/Tabular'
 " DoxygenToolkit.vim
-Plug 'vim-scripts/DoxygenToolkit.vim'
+Plug 'vim-scripts/DoxygenToolkit.vim', { 'for' :['c','cpp','python']}
 " Auto formater
 Plug 'Chiel92/vim-autoformat'
 " CCTREE
@@ -656,6 +656,8 @@ if exists(":Tabularize")
     nmap <Leader>a: :Tabularize /:\zs<CR>
     vmap <Leader>a: :Tabularize /:\zs<CR>
 endif
+
+" Doxygen
 nnoremap <leader>d :Dox<CR>
 
 "Open file with previous line
