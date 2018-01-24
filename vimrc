@@ -139,7 +139,7 @@ Plug 'terryma/vim-multiple-cursors'
 " Tabline - Configure tabs within Terminal Vim
 Plug 'mkitt/tabline.vim'
 " A vim plugin to help you to create/update cscope database and connect to existing proper database automatically.
-Plug 'brookhong/cscope.vim', { 'for': ['c','cpp','asm']}
+Plug 'brookhong/cscope.vim', { 'for': ['c','cpp']}
 " A vim plugin to display the indention levels with thin vertical lines
 Plug 'Yggdroot/indentLine'
 " Speed up Vim by updating folds only when called-for.
@@ -148,7 +148,7 @@ Plug 'Konfekt/FastFold'
 Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
 " Markdown Vim Mode
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown'}
-Plug 'FredKSchott/CoVim'
+
 call plug#end()
 " ============================================================================
 " Install plugins the first time vim runs
@@ -231,10 +231,6 @@ map <Down> gj
 " old autocomplete keyboard shortcut
 imap <C-J> <C-X><C-O>
 
-" Comment this line to enable autocompletion preview window
-" (displays documentation related to the selected completion option)
-" Disabled by default because preview makes the window flicker
-"set completeopt-=preview
 " save as sudo
 ca w!! w !sudo tee "%"
 
@@ -428,19 +424,7 @@ let g:neocomplcache_min_syntax_length = 1
 " YouCompleteMe
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_cache_omnifunc=0
 let g:ycm_seed_identifiers_with_syntax=1
-" AutoComplete
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-set completeopt=longest,menu
-inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
-inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
-inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
-inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
-" Autoclose ------------------------------
-
-" Fix to let ESC work as espected with Autoclose plugin
-"let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 
 " DragVisuals ------------------------------
 
@@ -489,6 +473,7 @@ set tr
 " Autoformat
 let g:formatdef_astyle_c = '"astyle --mode=c --style=allman --convert-tabs --indent=spaces=4 --break-blocks --add-brackets --lineend=linux --pad-oper"'
 let g:formatters_c =['clangformat']
+let g:formatdef_clangformat ="'clang-format -lines='.a:firstline.':'.a:lastline.' --assume-filename=\"'.expand('%:p').'\" -style=\"{ AlignTrailingComments: true , BreakBeforeBraces: Allman , ColumnLimit: 100 , IndentWidth: 4 , KeepEmptyLinesAtTheStartOfBlocks: false , ObjCSpaceAfterProperty: true , ObjCSpaceBeforeProtocolList: true , PointerBindsToType: false , SpacesBeforeTrailingComments: 1 , TabWidth: 4 , UseTab: Never , SpaceAfterCStyleCast : true , SpaceBeforeAssignmentOperators : true , SpaceBeforeAssignmentOperators : true}\"'"
 let g:autoformat_verbosemode = 1
 let g:formatdef_autopep8 = "'autopep8 - --range '.a:firstline.' '.a:lastline"
 noremap ,af :Autoformat<CR>
@@ -672,23 +657,12 @@ if exists(":Tabularize")
     vmap <Leader>a: :Tabularize /:\zs<CR>
 endif
 nnoremap <leader>d :Dox<CR>
+
+"Open file with previous line
 if has("autocmd")
-    autocmd BufRead *.txt set tw=78
     autocmd BufReadPost *
                 \ if line("'\"") > 0 && line ("'\"") <= line("$") |
                 \   exe "normal g'\"" |
                 \ endif
 endif
 
-let g:hlsearch = 1
-function! TogglehlSearch()
-    if (g:hlsearch==1)
-        set nohlsearch
-        let g:hlsearch =0
-    else
-        set hlsearch
-        let g:hlsearch =1
-    endif
-endfunction
-
-nmap ,hl :call TogglehlSearch()<CR>
