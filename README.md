@@ -5,7 +5,7 @@
         ```
     2. Install python modules by pip
         ```
-        sudo pip install dbgp vim-debug pep8 flake8 pyflakes isort autopep8
+        sudo pip install dbgp vim-debug flake8 pyflakes isort autopep8
         ```
         To speedup startup time of vim, it's recommended to install pyOpenSSL
         ```
@@ -14,11 +14,15 @@
     3. Install ctags and other application
         * Ubuntu
         ```
-        sudo apt-get install exuberant-ctags git astyle
+        sudo apt-get install git
         ```
-        * OS X
+    4. Install js-beautify
         ```
-        brew install ctags astyle
+        npm -g install js-beautify
+        ```
+        or
+        ```
+        pip install jsbeautifier
         ```
 - Installation
     * ` git clone https://github.com/sykuang/kvimrc.git $HOME/.kvimrc;ln $HOME/.kvimrc/vimrc $HOME/.vimrc `

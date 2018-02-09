@@ -471,9 +471,11 @@ let g:airline_section_c ="%t%m %#__accent_red#%{airline#util#wrap(airline#parts#
 set tr
 "let g:airline#extensions#tabline#fnamemod
 " Autoformat
-let g:formatdef_astyle_c = '"astyle --mode=c --style=allman --convert-tabs --indent=spaces=4 --break-blocks --add-brackets --lineend=linux --pad-oper"'
+"let g:formatdef_astyle_c = '"astyle --mode=c --style=allman --convert-tabs --indent=spaces=4 --break-blocks --add-brackets --lineend=linux --pad-oper"'
 let g:formatters_c =['clangformat']
 let g:formatdef_clangformat ="'clang-format -lines='.a:firstline.':'.a:lastline.' --assume-filename=\"'.expand('%:p').'\" -style=\"{ AlignTrailingComments: true , BreakBeforeBraces: Allman , ColumnLimit: 100 , IndentWidth: 4 , KeepEmptyLinesAtTheStartOfBlocks: false , ObjCSpaceAfterProperty: true , ObjCSpaceBeforeProtocolList: true , PointerBindsToType: false , SpacesBeforeTrailingComments: 1 , TabWidth: 4 , UseTab: Never , SpaceAfterCStyleCast : true , SpaceBeforeAssignmentOperators : true , SpaceBeforeAssignmentOperators : true}\"'"
+
+let formatdef_jsbeautify_javascript ="'js-beautify -X -s 4 -j'"
 let g:autoformat_verbosemode = 1
 let g:formatdef_autopep8 = "'autopep8 - --range '.a:firstline.' '.a:lastline"
 noremap ,af :Autoformat<CR>
@@ -579,7 +581,7 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 "Set YouCompleteMe
 function! Load_ycm()
-    if (&ft=='c' || &ft=='cpp' || &ft=='python')
+    if (&ft=='c' || &ft=='cpp' || &ft=='python' || &ft=='javascript')
         call plug#load('YouCompleteMe')
         if exists('g:loaded_youcompleteme')
             call youcompleteme#Enable()
