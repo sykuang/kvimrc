@@ -72,7 +72,7 @@ if v:version > 704 || (v:version == 704 && has('patch143'))
     endfunction
     Plug 'Valloric/YouCompleteMe',{ 'on': [], 'do':  function('YCMInstall') }
     Plug 'davidhalter/jedi'
-    Plug 'kenkuang1213/YCM-Generator',{'branch':'stable'}
+    Plug 'sykuang/YCM-Generator',{'branch':'stable'}
     "Better autocompletion
     Plug 'Shougo/neocomplcache.vim',{'for': ['sh']}
 else
