@@ -31,8 +31,8 @@
 ## HotKey
 1. `<leader>`
     - leader key is `;`
-2. [AutoForamt](https://github.com/Chiel92/vim-autoformat)
-   - `,ff` for Auto Format
+2. [Auto Format](https://github.com/Chiel92/vim-autoformat)
+   - `,af` for Auto Format
 3. [cscope](https://github.com/brookhong/cscope.vim)
    * `<leader>bs` :cs find s Current Word
    * `<leader>bg` :cs find g Current Word
