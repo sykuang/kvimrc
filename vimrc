@@ -295,8 +295,7 @@ endif
 let Tlist_Exit_OnlyWindow = 1
 let Tlist_Show_One_File = 1
 let Tlist_Sort_Type = "order"
-"let Tlist_GainFocus_On_ToggleOpen=1
-
+"let Tlist_GainFocus_On_ToggleOpen=10
 " toggle taglist display
 map <F4> :TagbarToggle<CR>
 map [30~ :Tagbaroggle<CR>
