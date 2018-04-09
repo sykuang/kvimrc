@@ -142,10 +142,6 @@ Plug 'mkitt/tabline.vim'
 Plug 'brookhong/cscope.vim', { 'for': ['c','cpp']}
 " A vim plugin to display the indention levels with thin vertical lines
 Plug 'Yggdroot/indentLine'
-" Speed up Vim by updating folds only when called-for.
-Plug 'Konfekt/FastFold'
-" No-BS Python code folding for Vim
-Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
 " Markdown Vim Mode
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown'}
 
@@ -182,6 +178,7 @@ set shiftwidth=4
 autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType markdown setlocal shiftwidth=2 tabstop=2 softtabstop=2
 
 " always show status bar
 set ls=2

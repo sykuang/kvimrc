@@ -1,33 +1,24 @@
 # kvimrc
 ## Installation
 ### Pre-Installation
-1. Install pip  
-    ```
+1. Install python modules by pip  
+    * Install modules
+    ```bash
+    pip install --user dbgp vim-debug flake8 pyflakes isort autopep8 jsbeautifier pyOpenSSL
+    ``` 
+    * If you don't have pip, use following command to install
+    ```bash
     curl https://bootstrap.pypa.io/get-pip.py | python -  --user
     ```
-2. Install python modules by pip  
-    ```
-    pip install --user dbgp vim-debug flake8 pyflakes isort autopep8
-    ```  
-    * To speedup startup time of vim when using youcomplete, it's recommended to install pyOpenSSL   
-    ```
-    pip install --user pyOpenSSL
-    ```
-3. Install ctags and other application  
+1. Install ctags and other application  
     * Ubuntu  
-    ```
+    ```bash
     sudo apt-get install git
     ```
-4. Install js-beautify  
-    ```
-    npm -g install js-beautify
-    ```  
-    or  
-    ```
-    pip install jsbeautifier
-    ```
 ### Installation
-* ` git clone https://github.com/sykuang/kvimrc.git $HOME/.kvimrc;ln $HOME/.kvimrc/vimrc $HOME/.vimrc `
+```bash
+git clone https://github.com/sykuang/kvimrc.git $HOME/.kvimrc;ln -s $HOME/.kvimrc/vimrc $HOME/.vimrc
+```
 ## HotKey
 1. `<leader>`
     - leader key is `;`
