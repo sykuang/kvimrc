@@ -62,15 +62,15 @@ Plug 'tpope/vim-surround', { 'for': ['html', 'htmldjango', 'javascript'] }
 Plug 'michaeljsmith/vim-indent-object'
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
 " operators, highlighting, run and ipdb breakpoints)
-Plug 'python-mode/python-mode',{'for': ['python'] }
+Plug 'python-mode/python-mode',{'for': 'python', 'branch': 'develop'}
 " YouCompleteMe
 if v:version > 704 || (v:version == 704 && has('patch143'))
     function! YCMInstall(info)
         if a:info.status == 'installed'
-            !./install.sh --all
+            !./install.py --all
         endif
     endfunction
-    Plug 'Valloric/YouCompleteMe',{ 'on': [], 'do':  function('YCMInstall') }
+    Plug 'Valloric/YouCompleteMe',{ 'on':[], 'for':['javascript','c','cpp','python'], 'do':  function('YCMInstall') }
     Plug 'davidhalter/jedi'
     Plug 'sykuang/YCM-Generator',{'branch':'stable'}
     "Better autocompletion
@@ -230,17 +230,6 @@ imap <C-J> <C-X><C-O>
 " save as sudo
 ca w!! w !sudo tee "%"
 
-" simple recursive grep
-" both recursive grep commands with internal or external (fast) grep
-command! -nargs=1 RecurGrep lvimgrep /<args>/gj ./**/*.* | lopen | set nowrap
-command! -nargs=1 RecurGrepFast silent exec 'lgrep! <q-args> ./**/*.*' | lopen
-" mappings to call them
-nmap ,R :RecurGrep
-nmap ,r :RecurGrepFast
-" mappings to call them with the default word as search text
-nmap ,wR :RecurGrep <cword><CR>
-nmap ,wr :RecurGrepFast <cword><CR>
-
 " use 256 colors when possible
 if (&term =~? 'mlterm\|xterm\|xterm-256\|screen-256') || has('nvim')
     let &t_Co = 256
@@ -354,42 +343,7 @@ let g:ctrlp_custom_ignore = {
 let g:ctrlp_use_caching = 1
 let g:ctrlp_max_files = 30000
 let g:ctrlp_root_markers = ['.ctrlp']
-" Syntastic ------------------------------
 
-" show list of errors and warnings on the current file
-"nmap <leader>e :Errors<CR>
-" check also when just opened the file
-"let g:syntastic_check_on_open = 1
-" don't put icons on the sign column (it hides the vcs status icons of signify)
-"let g:syntastic_enable_signs = 0
-" custom icons (enable them if you use a patched font, and enable the previous
-" setting)
-"let g:syntastic_error_symbol = '✗'
-"let g:syntastic_warning_symbol = '⚠'
-"let g:syntastic_style_error_symbol = '✗'
-"let g:syntastic_style_warning_symbol = '⚠'
-"let g:Syntastic_cpp_remove_include_errors = 1
-" Python-mode ------------------------------
-
-" don't use linter, we use syntastic for that
-"let g:pymode_lint_on_write = 0
-"let g:pymode_lint_signs = 0
-" don't fold python code on open
-"let g:pymode_folding = 0
-" don't load rope by default. Change to 1 to use rope
-let g:pymode_rope = 0
-" open definitions on same window, and custom mappings for definitions and
-" occurrences
-"let g:pymode_rope_goto_definition_bind = ',d'
-"let g:pymode_rope_goto_definition_cmd = 'e'
-"nmap ,D :tab split<CR>:PymodePython rope.goto()<CR>
-"nmap ,o :RopeFindOccurrences<CR>
-
-" NeoComplCache ------------------------------
-
-" most of them not documented because I'm not sure how they work
-" (docs aren't good, had to do a lot of trial and error to make
-" it play nice)
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_enable_ignore_case = 1
 let g:neocomplcache_enable_smart_case = 1
@@ -567,7 +521,6 @@ nnoremap <C-l> <C-w>l
 "Set YouCompleteMe
 function! Load_ycm()
     if (&ft=='c' || &ft=='cpp' || &ft=='python' || &ft=='javascript')
-        call plug#load('YouCompleteMe')
         if exists('g:loaded_youcompleteme')
             call youcompleteme#Enable()
         endif
@@ -618,7 +571,9 @@ autocmd BufNewFile,BufRead *.rs setf rust
 
 
 " simple recursive grep
-let g:ackprg = 'ag --nogroup --nocolor --column'
+if executable("rg")
+let g:ackprg = 'rg'
+endif
 nmap ,r :Ack
 nmap ,wr :Ack <cword><CR>
 
@@ -654,4 +609,3 @@ if has("autocmd")
                 \   exe "normal g'\"" |
                 \ endif
 endif
-
