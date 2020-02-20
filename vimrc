@@ -443,6 +443,7 @@ nnoremap  <leader>fi :call CscopeFind('i', expand('<cword>'))<CR>
 let g:cscope_silent=1
 nmap cn :cnext<CR>
 nmap cp :cprevious<CR>
+let g:cscope_interested_files = '\.c$\|\.cpp$\|\.h$\|\.hpp'
 set cst
 " to use fancy symbols for airline, uncomment the following lines and use a
 " patched font (more info on the README.rst)
@@ -551,8 +552,6 @@ syntax enable
 " Show trailing whitespace and tab
 highlight ExtraWhitespace ctermbg=green guibg=darkgreen
 match ExtraWhitespace /\s\+$/
-autocmd FileType c,cpp set list!
-autocmd FileType c,cpp set listchars=tab:>-
 autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
@@ -609,3 +608,10 @@ if has("autocmd")
                 \   exe "normal g'\"" |
                 \ endif
 endif
+
+" Show tab with >-
+function! ShowTab()
+    set list!
+    set listchars=tab:>-
+endfunction
+nmap <leader>t :call ShowTab()<CR>
