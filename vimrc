@@ -70,7 +70,7 @@ if v:version > 704 || (v:version == 704 && has('patch143'))
             !./install.py --all
         endif
     endfunction
-    Plug 'Valloric/YouCompleteMe',{ 'on':[], 'for':['javascript','c','cpp','python','sh'], 'do':  function('YCMInstall') }
+    Plug 'Valloric/YouCompleteMe',{ 'on':[], 'for':['javascript','c','cpp','python','typescript','sh'], 'do':  function('YCMInstall') }
     Plug 'davidhalter/jedi'
     Plug 'sykuang/YCM-Generator',{'branch':'stable'}
 else
@@ -140,7 +140,7 @@ Plug 'brookhong/cscope.vim', { 'for': ['c','cpp']}
 Plug 'Yggdroot/indentLine'
 " Markdown Vim Mode
 Plug 'plasticboy/vim-markdown', { 'for': 'markdown'}
-
+Plug 'leafgarland/typescript-vim'
 call plug#end()
 " ============================================================================
 " Install plugins the first time vim runs
@@ -176,6 +176,8 @@ autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType markdown setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType json setlocal shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType shell setlocal shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=2
 
 " always show status bar
 set ls=2
@@ -194,7 +196,8 @@ set nu
 
 " set leader
 let mapleader=";"
-
+" set enconding
+set encoding=utf8
 " tab navigation mappings
 map tn :tabn<CR>
 map tp :tabp<CR>
@@ -411,7 +414,7 @@ set tr
 "let g:formatdef_astyle_c = '"astyle --mode=c --style=allman --convert-tabs --indent=spaces=4 --break-blocks --add-brackets --lineend=linux --pad-oper"'
 let g:formatters_c =['clangformat']
 let g:formatdef_clangformat ="'clang-format -lines='.a:firstline.':'.a:lastline.' --assume-filename=\"'.expand('%:p').'\" -style=\"{ AlignTrailingComments: true , BreakBeforeBraces: Allman , ColumnLimit: 100 , IndentWidth: 4 , KeepEmptyLinesAtTheStartOfBlocks: false , ObjCSpaceAfterProperty: true , ObjCSpaceBeforeProtocolList: true , PointerBindsToType: false , SpacesBeforeTrailingComments: 1 , TabWidth: 4 , UseTab: Never , SpaceAfterCStyleCast : true , SpaceBeforeAssignmentOperators : true , SpaceBeforeAssignmentOperators : true}\"'"
-
+let g:formatters_json=['fixjson']
 let g:formatdef_jsbeautify_javascript = "'js-beautify -X -s 2 -j'"
 let g:autoformat_verbosemode = 0
 let g:formatdef_autopep8 = "'autopep8 --max-line-length 79 - --range '.a:firstline.' '.a:lastline"
@@ -563,9 +566,11 @@ set autoread"
 au CursorHold * checktime
 
 " Set filetype
+augroup filetypedetect
 autocmd BufNewFile,BufRead *.css setf css
 autocmd BufNewFile,BufRead *.rs setf rust
-
+autocmd BufNewFile,BufRead *.ts   setf Typescript
+augroup END
 
 " simple recursive grep
 if executable("rg")
