@@ -70,11 +70,9 @@ if v:version > 704 || (v:version == 704 && has('patch143'))
             !./install.py --all
         endif
     endfunction
-    Plug 'Valloric/YouCompleteMe',{ 'on':[], 'for':['javascript','c','cpp','python'], 'do':  function('YCMInstall') }
+    Plug 'Valloric/YouCompleteMe',{ 'on':[], 'for':['javascript','c','cpp','python','sh'], 'do':  function('YCMInstall') }
     Plug 'davidhalter/jedi'
     Plug 'sykuang/YCM-Generator',{'branch':'stable'}
-    "Better autocompletion
-    Plug 'Shougo/neocomplcache.vim',{'for': ['sh']}
 else
     Plug 'Shougo/neocomplcache.vim'
 endif
@@ -571,7 +569,7 @@ autocmd BufNewFile,BufRead *.rs setf rust
 
 " simple recursive grep
 if executable("rg")
-let g:ackprg = 'rg'
+let g:ackprg = 'rg --vimgrep'
 endif
 nmap ,r :Ack
 nmap ,wr :Ack <cword><CR>
