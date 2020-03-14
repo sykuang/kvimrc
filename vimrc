@@ -31,16 +31,12 @@ endif
 call plug#begin('~/.vim/plugged')
 " Plugins from github repos:
 
-" Python and PHP Debugger
-Plug 'fisadev/vim-debug.vim', { 'for': ['py', 'php'] }
 " Better file browser
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 " Code commenter
 Plug 'scrooloose/nerdcommenter'
-" Code and files fuzzy finder
-Plug 'kien/ctrlp.vim'
-" Extension to ctrlp, for fuzzy command finder
-Plug 'fisadev/vim-ctrlp-cmdpalette'
+" fuzzy search file
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 " Zen coding
 Plug 'mattn/emmet-vim', { 'for': ['html', 'htmldjango', 'javascript'] }
 " Git integration
@@ -48,16 +44,10 @@ Plug 'motemen/git-vim'
 " Airline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-" Terminal Vim with 256 colors colorscheme
-Plug 'fisadev/fisa-vim-colorscheme'
-" Consoles as buffers
-Plug 'rosenfeld/conque-term'
-" Pending tasks list
-Plug 'fisadev/FixedTaskList.vim'
+" Color scheme
+Plug 'junegunn/seoul256.vim'
 " Surround
 Plug 'tpope/vim-surround', { 'for': ['html', 'htmldjango', 'javascript'] }
-" Autoclose
-"Plug 'Townk/vim-autoclose'
 " Indent text object
 Plug 'michaeljsmith/vim-indent-object'
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
@@ -83,25 +73,10 @@ Plug 'honza/vim-snippets', { 'for': ['html', 'htmldjango', 'javascript'] }
 Plug 'garbas/vim-snipmate', { 'for': ['html', 'htmldjango', 'javascript'] }
 " Git Gutter
 Plug 'airblade/vim-gitgutter'
-" Automatically sort python imports
-Plug 'fisadev/vim-isort',{'for': 'python'}
-" Drag visual blocks arround
-Plug 'fisadev/dragvisuals.vim'
-" Window chooser
-Plug 't9md/vim-choosewin'
 " Python and other languages code checker
 Plug 'scrooloose/syntastic',{'for': ['python','sh'] }
 " Paint css colors with the real color
 Plug 'lilydjwg/colorizer',{'for': ['css'] }
-" Relative numbering of lines (0 is the current line)
-" (disabled by default because is very intrusive and can't be easily toggled
-" on/off. When the plugin is present, will always activate the relative
-" numbering every time you go to normal mode. Author refuses to add a setting
-" to avoid that)
-" Plug 'myusuf3/numbers.vim'
-
-" Plugins from vim-scripts repos:
-
 " Search results counter
 Plug 'vim-scripts/IndexedSearch'
 " XML/HTML tags navigation
@@ -117,13 +92,12 @@ Plug 'vim-scripts/DoxygenToolkit.vim', { 'for' :['c','cpp','python']}
 " Auto formater
 Plug 'Chiel92/vim-autoformat'
 " CCTREE
-Plug 'hari-rangarajan/CCTree',{'for':['c','cpp']}
-Plug 'wesleyche/Trinity'
-Plug 'wesleyche/SrcExpl', { 'on': 'SrcExplToggle' }
+Plug 'hari-rangarajan/CCTree',{'for':['c']}
+Plug 'wesleyche/SrcExpl', { 'for':['c'], 'on': 'SrcExplToggle' }
 " rust
 Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 " tagbar
-Plug 'majutsushi/tagbar'
+Plug 'majutsushi/tagbar', { 'for':['c','cpp','python']}
 " Undo tree
 Plug 'mbbill/undotree'
 " Mark
@@ -139,8 +113,9 @@ Plug 'brookhong/cscope.vim', { 'for': ['c','cpp']}
 " A vim plugin to display the indention levels with thin vertical lines
 Plug 'Yggdroot/indentLine'
 " Markdown Vim Mode
-Plug 'plasticboy/vim-markdown', { 'for': 'markdown'}
-Plug 'leafgarland/typescript-vim'
+Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
+Plug 'junegunn/limelight.vim', { 'for': 'markdown' }
+Plug 'leafgarland/typescript-vim', { 'for':'typescript'}
 call plug#end()
 " ============================================================================
 " Install plugins the first time vim runs
@@ -231,14 +206,8 @@ imap <C-J> <C-X><C-O>
 " save as sudo
 ca w!! w !sudo tee "%"
 
-" use 256 colors when possible
-if (&term =~? 'mlterm\|xterm\|xterm-256\|screen-256') || has('nvim')
-    let &t_Co = 256
-    colorscheme fisa
-else
-    colorscheme delek
-endif
-
+" Set color scheme
+colo seoul256
 " when scrolling, keep cursor 3 lines away from screen border
 set scrolloff=3
 
@@ -307,43 +276,8 @@ let g:vim_debug_disable_mappings = 1
 "map <F11> :Dbg down<CR>
 "map <F12> :Dbg up<CR>
 
-" CtrlP ------------------------------
-
-" file finder mapping
-let g:ctrlp_map = ',e'
-" tags (symbols) in current file finder mapping
-nmap ,g :CtrlPBufTag<CR>
-" tags (symbols) in all files finder mapping
-nmap ,G :CtrlPBufTagAll<CR>
-" general code finder in all files mapping
-nmap ,f :CtrlPLine<CR>
-" recent files finder mapping
-nmap ,m :CtrlPMRUFiles<CR>
-" commands finder mapping
-nmap ,c :CtrlPCmdPalette<CR>
-" to be able to call CtrlP with default search text
-function! CtrlPWithSearchText(search_text, ctrlp_command_end)
-    execute ':CtrlP' . a:ctrlp_command_end
-    call feedkeys(a:search_text)
-endfunction
-" same as previous mappings, but calling with current word as default text
-nmap ,wg :call CtrlPWithSearchText(expand('<cword>'), 'BufTag')<CR>
-nmap ,wG :call CtrlPWithSearchText(expand('<cword>'), 'BufTagAll')<CR>
-nmap ,wf :call CtrlPWithSearchText(expand('<cword>'), 'Line')<CR>
-nmap ,we :call CtrlPWithSearchText(expand('<cword>'), '')<CR>
-nmap ,pe :call CtrlPWithSearchText(expand('<cfile>'), '')<CR>
-nmap ,wm :call CtrlPWithSearchText(expand('<cword>'), 'MRUFiles')<CR>
-nmap ,wc :call CtrlPWithSearchText(expand('<cword>'), 'CmdPalette')<CR>
-" don't change working directory
-let g:ctrlp_working_path_mode = 'ra'
-" ignore these files and folders on file finder
-let g:ctrlp_custom_ignore = {
-            \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules)$',
-            \ 'file': '\v\.(pyc|pyo|o|out|files|doc|xls|mk|txt|xlsx|Kconfig|tmp)$|tags',
-            \ }
-let g:ctrlp_use_caching = 1
-let g:ctrlp_max_files = 30000
-let g:ctrlp_root_markers = ['.ctrlp']
+nmap ,e :FZF<CR>
+nmap ,o :FZF
 
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_enable_ignore_case = 1
@@ -611,7 +545,6 @@ if has("autocmd")
                 \   exe "normal g'\"" |
                 \ endif
 endif
-
 " Show tab with >-
 function! ShowTab()
     set list!
