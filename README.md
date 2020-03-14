@@ -1,21 +1,5 @@
 # kvimrc
 ## Installation
-### Pre-Installation
-1. Install python modules by pip  
-    * Install modules
-    ```bash
-    pip install --user dbgp vim-debug flake8 pyflakes isort autopep8 jsbeautifier pyOpenSSL
-    ``` 
-    * If you don't have pip, use following command to install
-    ```bash
-    curl https://bootstrap.pypa.io/get-pip.py | python -  --user
-    ```
-1. Install ctags and other application  
-    * Ubuntu  
-    ```bash
-    sudo apt-get install git
-    ```
-### Installation
 ```bash
 git clone https://github.com/sykuang/kvimrc.git $HOME/.kvimrc;ln -s $HOME/.kvimrc/vimrc $HOME/.vimrc
 ```

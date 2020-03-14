@@ -496,8 +496,7 @@ autocmd BufWinLeave * call clearmatches()
 set foldenable
 
 " check one time after 4s of inactivity in normal mode
-set autoread"
-au CursorHold * checktime
+au FocusLost,WinLeave * :silent! noautocmd w
 
 " Set filetype
 augroup filetypedetect
