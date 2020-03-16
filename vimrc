@@ -36,7 +36,7 @@ Plug 'tpope/vim-sensible'
 " Better file browser
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 " Code commenter
-Plug 'scrooloose/nerdcommenter'
+Plug 'tpope/vim-commentary', { 'on': ['<Plug>CommentaryLine', '<Plug>Commentary'] }
 " fuzzy search file
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 " Zen coding
@@ -47,7 +47,7 @@ Plug 'motemen/git-vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " Color scheme
-Plug 'junegunn/seoul256.vim'
+Plug 'cocopon/iceberg.vim'
 " Surround
 Plug 'tpope/vim-surround', { 'for': ['html', 'htmldjango', 'javascript'] }
 " Indent text object
@@ -88,10 +88,8 @@ Plug 'vim-scripts/IndexedSearch'
 Plug 'vim-scripts/matchit.zip', { 'for': ['xml', 'html'] }
 " Yank history navigation
 Plug 'vim-scripts/YankRing.vim'
-" vimspell
-Plug 'vim-scripts/vimspell'
 " Tabular
-Plug 'vim-scripts/Tabular'
+Plug 'vim-scripts/Tabular', { 'on': ['Tabularize'] }
 " DoxygenToolkit.vim
 Plug 'vim-scripts/DoxygenToolkit.vim', { 'for' :['c','cpp','python']}
 " Auto formater
@@ -106,7 +104,7 @@ Plug 'majutsushi/tagbar', { 'for':['c','cpp','python']}
 " Undo tree
 Plug 'mbbill/undotree'
 " Mark
-Plug 'Yggdroot/vim-mark'
+Plug 'Yggdroot/vim-mark', { 'on': '<Plug>MarkSet' }
 " Ack code search (requires ack installed in the system)
 Plug 'mileszs/ack.vim'
 " True Sublime Text style multiple selections for Vim
@@ -120,7 +118,12 @@ Plug 'Yggdroot/indentLine'
 " Markdown Vim Mode
 Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
 Plug 'junegunn/limelight.vim', { 'for': 'markdown' }
+" Typescript support
 Plug 'leafgarland/typescript-vim', { 'for':'typescript'}
+" auto-pairs
+Plug 'jiangmiao/auto-pairs'
+" A git wrpper
+Plug 'tpope/vim-fugitive', { 'on': ['GitBlame','GitDiff','GitLog','GitAdd'] }
 call plug#end()
 " ============================================================================
 " Install plugins the first time vim runs
@@ -200,8 +203,8 @@ imap <C-J> <C-X><C-O>
 ca w!! w !sudo tee "%"
 
 " Set color scheme
-colo seoul256
-
+" colo seoul256
+colo iceberg
 " autocompletion of files and commands behaves like shell
 " (complete only the common part, list the options that match)
 set wildmode=list:longest
@@ -288,7 +291,7 @@ highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
 " Airline ------------------------------
 
-let g:airline_powerline_fonts = 0
+let g:airline_powerline_fonts = 1
 let g:airline_theme = 'bubblegum'
 let g:airline#extensions#whitespace#enabled = 0
 let g:airline#extensions#ycm#enabled = 1
@@ -297,7 +300,7 @@ let g:airline#extensions#ycm#warning_symbol = 'W:'
 let g:airline_section_c ="%t%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#"
 set tr
 "let g:airline#extensions#tabline#fnamemod
-
+let g:airline_highlighting_cache = 1
 " Autoformat ---------------------------
 let g:formatters_c =['clangformat']
 let g:formatdef_clangformat ="'clang-format -lines='.a:firstline.':'.a:lastline.' --assume-filename=\"'.expand('%:p').'\" -style=\"{ AlignTrailingComments: true , BreakBeforeBraces: Allman , ColumnLimit: 100 , IndentWidth: 4 , KeepEmptyLinesAtTheStartOfBlocks: false , ObjCSpaceAfterProperty: true , ObjCSpaceBeforeProtocolList: true , PointerBindsToType: false , SpacesBeforeTrailingComments: 1 , TabWidth: 4 , UseTab: Never , SpaceAfterCStyleCast : true , SpaceBeforeAssignmentOperators : true , SpaceBeforeAssignmentOperators : true}\"'"
@@ -418,8 +421,7 @@ let g:gitgutter_grep = 'rg'
 
 " Set vimspell
 set spelllang=en_us
-nn <C-F7> :setlocal spell! spell?<CR>
-nn [31~ :setlocal spell! spell?<CR>
+nmap <F7> :set spell! spell?<CR>
 syntax enable
 
 " Show trailing whitespace and tab
@@ -433,24 +435,17 @@ autocmd BufWinLeave * call clearmatches()
 " Set Foldenable
 set foldenable
 
-" check one time after 4s of inactivity in normal mode
-au FocusLost,WinLeave * :silent! noautocmd w
-
-
-" simple recursive grep
+" simple recursive grep ---------------
 if executable("rg")
 let g:ackprg = 'rg --vimgrep'
 endif
 nmap ,r :Ack
 nmap ,wr :Ack <cword><CR>
 
-" nerdcommenter
-let g:NERDAltDelims_c = 1
-
 " Quick Preview window
 nnoremap  <leader>sp [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
 
-" Tabular
+" Tabular -----------------------------
 if exists(":Tabularize")
     nmap <Leader>a= :Tabularize /=<CR>
     vmap <Leader>a= :Tabularize /=<CR>
@@ -458,5 +453,17 @@ if exists(":Tabularize")
     vmap <Leader>a: :Tabularize /:\zs<CR>
 endif
 
-" Doxygen
+" Doxygen -----------------------------
 nnoremap <leader>d :Dox<CR>
+
+" vim-fugitive ------------------------
+nmap <Leader>gb :GitBlame<CR>
+nmap <Leader>gd :GitDiff<CR>
+nmap <Leader>gl :GitLog<CR>
+nmap <Leader>ga :GitAdd<CR>
+
+" Commentary --------------------------
+autocmd! User vim-commentary unmap gcc
+autocmd! User vim-commentary unmap gc
+nmap <Leader>c<space> <Plug>CommentaryLine
+vmap <Leader>c<space> <Plug>Commentary
