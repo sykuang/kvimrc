@@ -31,6 +31,8 @@ endif
 call plug#begin('~/.vim/plugged')
 " Plugins from github repos:
 
+" vim-sensible
+Plug 'tpope/vim-sensible'
 " Better file browser
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 " Code commenter
@@ -54,18 +56,21 @@ Plug 'michaeljsmith/vim-indent-object'
 " operators, highlighting, run and ipdb breakpoints)
 Plug 'python-mode/python-mode',{'for': 'python', 'branch': 'develop'}
 " YouCompleteMe
-if v:version > 704 || (v:version == 704 && has('patch143'))
-    function! YCMInstall(info)
-        if a:info.status == 'installed'
-            !./install.py --all
+function! YCMInstall(info)
+    "if a:info.status == 'installed' || a:info.force
+        let buildparameter="--clangd-completer"
+        if executable('go')
+            let buildparameter=buildparameter . " --go-completer"
         endif
-    endfunction
-    Plug 'Valloric/YouCompleteMe',{ 'on':[], 'for':['javascript','c','cpp','python','typescript','sh'], 'do':  function('YCMInstall') }
+        if executable('tsc')
+            let buildparameter=buildparameter . " --ts-completer"
+        endif
+        let l:installcmd="!./install.py " . buildparameter
+        execute l:installcmd
+    "endif
+endfunction
+Plug 'Valloric/YouCompleteMe',{ 'on':[], 'for':['javascript','c','cpp','python','typescript','sh'], 'do':  function('YCMInstall') }
     Plug 'davidhalter/jedi'
-    Plug 'sykuang/YCM-Generator',{'branch':'stable'}
-else
-    Plug 'Shougo/neocomplcache.vim'
-endif
 " Snippets manager (SnipMate), dependencies, and snippets repo
 Plug 'MarcWeber/vim-addon-mw-utils', { 'for': ['html', 'htmldjango', 'javascript'] }
 Plug 'tomtom/tlib_vim', { 'for': ['html', 'htmldjango', 'javascript'] }
@@ -128,13 +133,6 @@ endif
 " ============================================================================
 " Vim settings and mappings
 
-" Let backspace can move from current line
-"  reference http://vim.wikia.com/wiki/Backspace_and_delete_problems
-set backspace=indent,eol,start
-
-" no vi-compatible
-set nocompatible
-
 " allow plugins by file type (required for plugins!)
 filetype plugin on
 filetype indent on
@@ -144,6 +142,13 @@ set expandtab
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
+
+" Set filetype
+augroup filetypedetect
+autocmd BufNewFile,BufRead *.css setf css
+autocmd BufNewFile,BufRead *.rs setf rust
+autocmd BufNewFile,BufRead *.ts   setf Typescript
+augroup END
 
 " tab length exceptions on some file types
 autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
@@ -157,11 +162,9 @@ autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=2
 " always show status bar
 set ls=2
 
-" incremental search
-set incsearch
 " highlighted search results
 set hlsearch
-" ignore search case
+" Ignore case
 set ignorecase
 " syntax highlight on
 syntax on
@@ -188,16 +191,6 @@ imap <C-S-Right> <ESC>:tabn<CR>
 map <C-S-Left> :tabp<CR>
 imap <C-S-Left> <ESC>:tabp<CR>
 
-" navigate windows with meta+arrows
-map <M-Right> <c-w>l
-map <M-Left> <c-w>h
-map <M-Up> <c-w>k
-map <M-Down> <c-w>j
-imap <M-Right> <ESC><c-w>l
-imap <M-Left> <ESC><c-w>h
-imap <M-Up> <ESC><c-w>k
-imap <M-Down> <ESC><c-w>j
-
 map <Up> gk
 map <Down> gj
 " old autocomplete keyboard shortcut
@@ -208,8 +201,6 @@ ca w!! w !sudo tee "%"
 
 " Set color scheme
 colo seoul256
-" when scrolling, keep cursor 3 lines away from screen border
-set scrolloff=3
 
 " autocompletion of files and commands behaves like shell
 " (complete only the common part, list the options that match)
@@ -222,6 +213,7 @@ set backupdir=~/.vim/dirs/backups " where to put backup files
 set undofile                      " persistent undos - undo after you re-open the file
 set undodir=~/.vim/dirs/undos
 set viminfo+=n~/.vim/dirs/viminfo
+
 " store yankring history file there too
 let g:yankring_history_dir = '~/.vim/dirs/'
 
@@ -235,6 +227,21 @@ endif
 if !isdirectory(&undodir)
     call mkdir(&undodir, "p")
 endif
+
+"Open file with previous line
+if has("autocmd")
+    autocmd BufReadPost *
+                \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+                \   exe "normal g'\"" |
+                \ endif
+endif
+
+" Show tab with >-
+function! ShowTab()
+    set list!
+    set listchars=tab:>-
+endfunction
+nmap <leader>t :call ShowTab()<CR>
 
 " ============================================================================
 " Plugins settings and mappings
@@ -257,81 +264,27 @@ map [25~ :NERDTreeToggle<CR>
 " don;t show these file types
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 
-" Tasklist ------------------------------
+" Tasklist ----------------------------
 
-" show pending tasks list
+" show pending tasks list -------------
 map <F2> :TaskList<CR>
 
-" Vim-debug ------------------------------
-
-" disable default mappings, have a lot of conflicts with other plugins
-let g:vim_debug_disable_mappings = 1
-" add some useful mappings
-"map <F5> :Dbg over<CR>
-"map <F6> :Dbg into<CR>
-"map <F7> :Dbg out<CR>
-"map <F8> :Dbg here<CR>
-"map <F9> :Dbg break<CR>
-"map <F10> :Dbg watch<CR>
-"map <F11> :Dbg down<CR>
-"map <F12> :Dbg up<CR>
-
+" Fzf ---------------------------------
 nmap ,e :FZF<CR>
 nmap ,o :FZF
 
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_ignore_case = 1
-let g:neocomplcache_enable_smart_case = 1
-"let g:neocomplcache_enable_auto_select = 1
-let g:neocomplcache_enable_fuzzy_completion = 1
-"let g:neocomplcache_enable_camel_case_completion = 1
-"let g:neocomplcache_enable_underbar_completion = 1
-"let g:neocomplcache_fuzzy_completion_start_length = 1
-"let g:neocomplcache_auto_completion_start_length = 1
-"let g:neocomplcache_manual_completion_start_length = 1
-let g:neocomplcache_min_keyword_length = 1
-let g:neocomplcache_min_syntax_length = 1
-"complete with workds from any opened file
-"let g:neocomplcache_same_filetype_lists = {}
-"let g:neocomplcache_same_filetype_lists._ = '_'
-
-" YouCompleteMe
+" YouCompleteMe ----------------------
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_seed_identifiers_with_syntax=1
 
-" DragVisuals ------------------------------
-
-" mappings to move blocks in 4 directions
-vmap <expr> <S-M-LEFT> DVB_Drag('left')
-vmap <expr> <S-M-RIGHT> DVB_Drag('right')
-vmap <expr> <S-M-DOWN> DVB_Drag('down')
-vmap <expr> <S-M-UP> DVB_Drag('up')
-" mapping to duplicate block
-vmap <expr> D DVB_Duplicate()
-
-" Signify ------------------------------
-
-" this first setting decides in which order try to guess your current vcs
-" UPDATE it to reflect your preferences, it will speed up opening files
-let g:signify_vcs_list = [ 'git', 'hg' ]
-" mappings to jump to changed blocks
-nmap <leader>gj <plug>(signify-next-hunk)
-nmap <leader>gk <plug>(signify-prev-hunk)
-" nicer colors
+" nicer colors ------------------------
 highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
 highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
 highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
 highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
 highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
 highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
-
-" Window Chooser ------------------------------
-
-" mapping
-nmap  -  <Plug>(choosewin)
-" show big letters
-let g:choosewin_overlay_enable = 1
 
 " Airline ------------------------------
 
@@ -344,18 +297,19 @@ let g:airline#extensions#ycm#warning_symbol = 'W:'
 let g:airline_section_c ="%t%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#"
 set tr
 "let g:airline#extensions#tabline#fnamemod
-" Autoformat
-"let g:formatdef_astyle_c = '"astyle --mode=c --style=allman --convert-tabs --indent=spaces=4 --break-blocks --add-brackets --lineend=linux --pad-oper"'
+
+" Autoformat ---------------------------
 let g:formatters_c =['clangformat']
 let g:formatdef_clangformat ="'clang-format -lines='.a:firstline.':'.a:lastline.' --assume-filename=\"'.expand('%:p').'\" -style=\"{ AlignTrailingComments: true , BreakBeforeBraces: Allman , ColumnLimit: 100 , IndentWidth: 4 , KeepEmptyLinesAtTheStartOfBlocks: false , ObjCSpaceAfterProperty: true , ObjCSpaceBeforeProtocolList: true , PointerBindsToType: false , SpacesBeforeTrailingComments: 1 , TabWidth: 4 , UseTab: Never , SpaceAfterCStyleCast : true , SpaceBeforeAssignmentOperators : true , SpaceBeforeAssignmentOperators : true}\"'"
-let g:formatters_json=['fixjson']
-let g:formatdef_jsbeautify_javascript = "'js-beautify -X -s 2 -j'"
+let g:formatters_json=['fixjson'] "Json formater
+let g:formatdef_jsbeautify_javascript = "'js-beautify -X -s 2 -j'" " Javascript formater
+let g:formatters_python=['yapf']
+let g:formatter_yapf_style = 'pep8' " Python formater
 let g:autoformat_verbosemode = 0
-let g:formatdef_autopep8 = "'autopep8 --max-line-length 79 - --range '.a:firstline.' '.a:lastline"
 noremap ,af :Autoformat<CR>
 map ,af :Autoformat<CR>
 
-" cscope shortcut
+" cscope shortcut ---------------------
 nnoremap <leader>fa :call CscopeFindInteractive(expand('<cword>'))<CR>
 nnoremap <leader>l :call ToggleLocationList()<CR>
 " s: Find this C symbol
@@ -380,24 +334,21 @@ nmap cn :cnext<CR>
 nmap cp :cprevious<CR>
 let g:cscope_interested_files = '\.c$\|\.cpp$\|\.h$\|\.hpp'
 set cst
-" to use fancy symbols for airline, uncomment the following lines and use a
-" patched font (more info on the README.rst)
-"if !exists('g:airline_symbols')
-"   let g:airline_symbols = {}
-"endif
-"let g:airline_left_sep = '⮀'
-"let g:airline_left_alt_sep = '⮁'
-"let g:airline_right_sep = '⮂'
-"let g:airline_right_alt_sep = '⮃'
-"let g:airline_symbols.branch = '⭠'
-"let g:airline_symbols.readonly = '⭤'
-"let g:airline_symbols.linenr = '⭡'
 
-nmap <C-F11> :TrinityToggleNERDTree<CR>
+" Airline -----------------------------
+if !exists('g:airline_symbols')
+   let g:airline_symbols = {}
+endif
+let g:airline_left_sep = '⮀'
+let g:airline_left_alt_sep = '⮁'
+let g:airline_right_sep = '⮂'
+let g:airline_right_alt_sep = '⮃'
+let g:airline_symbols.branch = '⭠'
+let g:airline_symbols.readonly = '⭤'
+let g:airline_symbols.linenr = '⭡'
 
 " Use rust autoformat
 let g:rustfmt_autosave = 1
-
 
 " Trinity settings --------------
 " // The switch of the Source Explorer
@@ -444,24 +395,13 @@ let g:SrcExpl_updateTagsKey = "<F12>"
 " // Set "<F4>" key for displaying the next definition in the jump list
 "let g:SrcExpl_nextDefKey = "<F4>"
 
-
-" Turn on spell checking
-nn <C-F7> :setlocal spell! spell?<CR>
-nn [31~ :setlocal spell! spell?<CR>
-
 "Set window nevigation
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
-"Set YouCompleteMe
-function! Load_ycm()
-    if (&ft=='c' || &ft=='cpp' || &ft=='python' || &ft=='javascript')
-        if exists('g:loaded_youcompleteme')
-            call youcompleteme#Enable()
-        endif
-    endif
-endfunction
+
+"Set YouCompleteMe --------------------
 let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_filepath_completion_use_working_dir = 1
@@ -469,19 +409,17 @@ nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 let g:ycm_enable_diagnostic_signs=0
-"let g:ycm_python_binary_path = '/usr/bin/python'
-"let g:ycm_path_to_python_interpreter="/usr/bin/python"
-nmap <leader>ly :call Load_ycm()<CR>
+
+" vim-gitgutter -----------------------
 " Set vim-gitgutter updatetime
 set updatetime=1000
-
-" Set local vimrc
-let g:localvimrc_ask=0
-let g:localvimrc_sandbox=0
+" user rg
+let g:gitgutter_grep = 'rg'
 
 " Set vimspell
 set spelllang=en_us
-"set spell
+nn <C-F7> :setlocal spell! spell?<CR>
+nn [31~ :setlocal spell! spell?<CR>
 syntax enable
 
 " Show trailing whitespace and tab
@@ -498,12 +436,6 @@ set foldenable
 " check one time after 4s of inactivity in normal mode
 au FocusLost,WinLeave * :silent! noautocmd w
 
-" Set filetype
-augroup filetypedetect
-autocmd BufNewFile,BufRead *.css setf css
-autocmd BufNewFile,BufRead *.rs setf rust
-autocmd BufNewFile,BufRead *.ts   setf Typescript
-augroup END
 
 " simple recursive grep
 if executable("rg")
@@ -518,14 +450,6 @@ let g:NERDAltDelims_c = 1
 " Quick Preview window
 nnoremap  <leader>sp [I:let nr = input("Which one: ")<Bar>exe "normal " . nr ."[\t"<CR>
 
-" FastFold
-let g:tex_fold_enabled=1
-"let g:vimsyn_folding='af'
-let g:xml_syntax_folding = 1
-let g:php_folding = 1
-let g:perl_fold = 1
-let g:fastfold_fold_command_suffixes = []
-set nofoldenable
 " Tabular
 if exists(":Tabularize")
     nmap <Leader>a= :Tabularize /=<CR>
@@ -536,17 +460,3 @@ endif
 
 " Doxygen
 nnoremap <leader>d :Dox<CR>
-
-"Open file with previous line
-if has("autocmd")
-    autocmd BufReadPost *
-                \ if line("'\"") > 0 && line ("'\"") <= line("$") |
-                \   exe "normal g'\"" |
-                \ endif
-endif
-" Show tab with >-
-function! ShowTab()
-    set list!
-    set listchars=tab:>-
-endfunction
-nmap <leader>t :call ShowTab()<CR>

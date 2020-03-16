@@ -1,5 +1,10 @@
 # kvimrc
 ## Installation
+1. Install related tools
+```
+pip install pyflakes yapf compiledb
+```
+1. Install vimrc
 ```bash
 git clone https://github.com/sykuang/kvimrc.git $HOME/.kvimrc;ln -s $HOME/.kvimrc/vimrc $HOME/.vimrc
 ```
