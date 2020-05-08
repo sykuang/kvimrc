@@ -50,8 +50,6 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'cocopon/iceberg.vim'
 " Surround
 Plug 'tpope/vim-surround', { 'for': ['html', 'htmldjango', 'javascript'] }
-" Indent text object
-Plug 'michaeljsmith/vim-indent-object'
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
 " operators, highlighting, run and ipdb breakpoints)
 Plug 'python-mode/python-mode',{'for': 'python', 'branch': 'develop'}
@@ -69,7 +67,7 @@ function! YCMInstall(info)
         execute l:installcmd
     "endif
 endfunction
-Plug 'Valloric/YouCompleteMe',{ 'on':[], 'for':['javascript','c','cpp','python','typescript','sh'], 'do':  function('YCMInstall') }
+Plug 'Valloric/YouCompleteMe',{ 'on':[], 'for':['javascript','c','cpp','python','typescript','sh','zsh'], 'do':  function('YCMInstall') }
     Plug 'davidhalter/jedi'
 " Snippets manager (SnipMate), dependencies, and snippets repo
 Plug 'MarcWeber/vim-addon-mw-utils', { 'for': ['html', 'htmldjango', 'javascript'] }
@@ -104,7 +102,7 @@ Plug 'majutsushi/tagbar', { 'for':['c','cpp','python']}
 " Undo tree
 Plug 'mbbill/undotree'
 " Mark
-Plug 'Yggdroot/vim-mark', { 'on': '<Plug>MarkSet' }
+Plug 'Yggdroot/vim-mark'
 " Ack code search (requires ack installed in the system)
 Plug 'mileszs/ack.vim'
 " True Sublime Text style multiple selections for Vim
@@ -124,6 +122,9 @@ Plug 'leafgarland/typescript-vim', { 'for':'typescript'}
 Plug 'jiangmiao/auto-pairs'
 " A git wrpper
 Plug 'tpope/vim-fugitive', { 'on': ['GitBlame','GitDiff','GitLog','GitAdd'] }
+" Local vimrc
+Plug 'embear/vim-localvimrc'
+Plug 'lyuts/vim-rtags'
 call plug#end()
 " ============================================================================
 " Install plugins the first time vim runs
@@ -161,6 +162,7 @@ autocmd FileType markdown setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType json setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType sh setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType typescript setlocal shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType c,cpp setlocal shiftwidth=4 tabstop=4 softtabstop=4
 
 " always show status bar
 set ls=2
@@ -216,8 +218,11 @@ set backup                        " make backup files
 set backupdir=~/.vim/dirs/backups " where to put backup files
 set undofile                      " persistent undos - undo after you re-open the file
 set undodir=~/.vim/dirs/undos
+if has('nvim')
+set viminfo+=n~/.nvim/dirs/viminfo
+else
 set viminfo+=n~/.vim/dirs/viminfo
-
+endif
 " store yankring history file there too
 let g:yankring_history_dir = '~/.vim/dirs/'
 
@@ -277,6 +282,38 @@ map <F2> :TaskList<CR>
 nmap ,e :FZF<CR>
 nmap ,o :FZF
 
+if has('nvim-0.4.0')
+    let $FZF_DEFAULT_OPTS = '--layout=reverse'
+    let g:fzf_layout = { 'window': 'call OpenFloatingWin()' }
+    function! OpenFloatingWin()
+        let height = &lines - 3
+        let width = float2nr(&columns - (&columns * 2 / 10))
+        let col = float2nr((&columns - width) / 2)
+
+        let opts = {
+                    \ 'relative': 'editor',
+                    \ 'row': height * 0.3,
+                    \ 'col': col + 30,
+                    \ 'width': width * 2 / 3,
+                    \ 'height': height / 2
+                    \ }
+
+        let buf = nvim_create_buf(v:false, v:true)
+        let win = nvim_open_win(buf, v:true, opts)
+
+        " 设置浮动窗口高亮
+        call setwinvar(win, '&winhl', 'Normal:Pmenu')
+
+        setlocal
+                    \ buftype=nofile
+                    \ nobuflisted
+                    \ bufhidden=hide
+                    \ nonumber
+                    \ norelativenumber
+                    \ signcolumn=no
+    endfunction
+endif
+
 " YouCompleteMe ----------------------
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
@@ -304,7 +341,6 @@ set tr
 let g:airline_highlighting_cache = 1
 " Autoformat ---------------------------
 let g:formatters_c =['clangformat']
-let g:formatdef_clangformat ="'clang-format -lines='.a:firstline.':'.a:lastline.' --assume-filename=\"'.expand('%:p').'\" -style=\"{ AlignTrailingComments: true , BreakBeforeBraces: Allman , ColumnLimit: 100 , IndentWidth: 4 , KeepEmptyLinesAtTheStartOfBlocks: false , ObjCSpaceAfterProperty: true , ObjCSpaceBeforeProtocolList: true , PointerBindsToType: false , SpacesBeforeTrailingComments: 1 , TabWidth: 4 , UseTab: Never , SpaceAfterCStyleCast : true , SpaceBeforeAssignmentOperators : true , SpaceBeforeAssignmentOperators : true}\"'"
 let g:formatters_json=['fixjson'] "Json formater
 let g:formatdef_jsbeautify_javascript = "'js-beautify -X -s 2 -j'" " Javascript formater
 let g:formatters_python=['yapf']
@@ -409,9 +445,9 @@ nnoremap <C-l> <C-w>l
 let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_filepath_completion_use_working_dir = 1
-nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
-nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
-nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <leader>yd :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>yf :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>yg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 let g:ycm_enable_diagnostic_signs=0
 
 " vim-gitgutter -----------------------
@@ -468,3 +504,8 @@ autocmd! User vim-commentary unmap gcc
 autocmd! User vim-commentary unmap gc
 nmap <Leader>c<space> <Plug>CommentaryLine
 vmap <Leader>c<space> <Plug>Commentary
+
+" Local vimrc -------------------------
+let g:localvimrc_ask = 0
+let g:localvimrc_persistent = 2
+let g:localvimrc_sandbox = 0
