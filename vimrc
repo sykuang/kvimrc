@@ -252,6 +252,8 @@ function! ShowTab()
 endfunction
 nmap <leader>t :call ShowTab()<CR>
 
+" Let vsplit in right side
+set splitright
 " ============================================================================
 " Plugins settings and mappings
 " Edit them as you wish.
@@ -281,6 +283,11 @@ map <F2> :TaskList<CR>
 " Fzf ---------------------------------
 nmap ,e :FZF<CR>
 nmap ,o :FZF
+
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-s': 'vsplit' }
 
 if has('nvim-0.4.0')
     let $FZF_DEFAULT_OPTS = '--layout=reverse'
