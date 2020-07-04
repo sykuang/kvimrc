@@ -460,8 +460,9 @@ let g:ycm_enable_diagnostic_signs=0
 " vim-gitgutter -----------------------
 " Set vim-gitgutter updatetime
 set updatetime=1000
-" user rg
+if executable("rg")
 let g:gitgutter_grep = 'rg'
+endif
 
 " Set vimspell
 set spelllang=en_us
