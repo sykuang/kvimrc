@@ -53,6 +53,18 @@ Plug 'tpope/vim-surround', { 'for': ['html', 'htmldjango', 'javascript'] }
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
 " operators, highlighting, run and ipdb breakpoints)
 Plug 'python-mode/python-mode',{'for': 'python', 'branch': 'develop'}
+
+if has('nvim')
+    " Plug 'davidhalter/jedi'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-tabnine', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-python', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-highlight', {'do': 'yarn install --frozen-lockfile'}
+Plug 'clangd/coc-clangd', {'do': 'yarn install --frozen-lockfile'}
+Plug 'josa42/coc-sh', {'do': 'yarn install --frozen-lockfile'}
+Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
+else
 " YouCompleteMe
 function! YCMInstall(info)
     "if a:info.status == 'installed' || a:info.force
@@ -67,14 +79,8 @@ function! YCMInstall(info)
         execute l:installcmd
     "endif
 endfunction
-" Plug 'Valloric/YouCompleteMe',{ 'on':[], 'for':['javascript','c','cpp','python','typescript','sh','zsh'], 'do':  function('YCMInstall') }
-    " Plug 'davidhalter/jedi'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-tabnine', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-python', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-highlight', {'do': 'yarn install --frozen-lockfile'}
-Plug 'clangd/coc-clangd', {'do': 'yarn install --frozen-lockfile'}
+Plug 'Valloric/YouCompleteMe',{ 'on':[], 'for':['javascript','c','cpp','python','typescript','sh','zsh'], 'do':  function('YCMInstall') }
+endif
 " Snippets manager (SnipMate), dependencies, and snippets repo
 Plug 'MarcWeber/vim-addon-mw-utils', { 'for': ['html', 'htmldjango', 'javascript'] }
 Plug 'tomtom/tlib_vim', { 'for': ['html', 'htmldjango', 'javascript'] }
