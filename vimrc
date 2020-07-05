@@ -67,8 +67,14 @@ function! YCMInstall(info)
         execute l:installcmd
     "endif
 endfunction
-Plug 'Valloric/YouCompleteMe',{ 'on':[], 'for':['javascript','c','cpp','python','typescript','sh','zsh'], 'do':  function('YCMInstall') }
-    Plug 'davidhalter/jedi'
+" Plug 'Valloric/YouCompleteMe',{ 'on':[], 'for':['javascript','c','cpp','python','typescript','sh','zsh'], 'do':  function('YCMInstall') }
+    " Plug 'davidhalter/jedi'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-tabnine', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-python', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-highlight', {'do': 'yarn install --frozen-lockfile'}
+Plug 'clangd/coc-clangd', {'do': 'yarn install --frozen-lockfile'}
 " Snippets manager (SnipMate), dependencies, and snippets repo
 Plug 'MarcWeber/vim-addon-mw-utils', { 'for': ['html', 'htmldjango', 'javascript'] }
 Plug 'tomtom/tlib_vim', { 'for': ['html', 'htmldjango', 'javascript'] }
@@ -77,7 +83,7 @@ Plug 'garbas/vim-snipmate', { 'for': ['html', 'htmldjango', 'javascript'] }
 " Git Gutter
 Plug 'airblade/vim-gitgutter'
 " Python and other languages code checker
-Plug 'scrooloose/syntastic',{'for': ['python','sh'] }
+" Plug 'scrooloose/syntastic',{'for': ['python','sh'] }
 " Paint css colors with the real color
 Plug 'lilydjwg/colorizer',{'for': ['css'] }
 " Search results counter
@@ -173,7 +179,7 @@ set hlsearch
 set ignorecase
 " syntax highlight on
 syntax on
-
+autocmd CursorHold * silent call CocActionAsync('highlight')
 " show line numbers
 set nu
 
