@@ -136,7 +136,6 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-fugitive', { 'on': ['GitBlame','GitDiff','GitLog','GitAdd'] }
 " Local vimrc
 Plug 'embear/vim-localvimrc'
-Plug 'lyuts/vim-rtags'
 call plug#end()
 " ============================================================================
 " Install plugins the first time vim runs
@@ -185,7 +184,9 @@ set hlsearch
 set ignorecase
 " syntax highlight on
 syntax on
+if has('nvim')
 autocmd CursorHold * silent call CocActionAsync('highlight')
+endif
 " show line numbers
 set nu
 
@@ -333,11 +334,6 @@ if has('nvim-0.4.0')
     endfunction
 endif
 
-" YouCompleteMe ----------------------
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_seed_identifiers_with_syntax=1
-
 " nicer colors ------------------------
 highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
 highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
@@ -460,15 +456,25 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-"Set YouCompleteMe --------------------
+if has('nvim')
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+else
+" YouCompleteMe ----------------------
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_seed_identifiers_with_syntax=1
 let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_filepath_completion_use_working_dir = 1
-nnoremap <leader>yd :YcmCompleter GoToDeclaration<CR>
-nnoremap <leader>yf :YcmCompleter GoToDefinition<CR>
-nnoremap <leader>yg :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap gd :YcmCompleter GoToDeclaration<CR>
+nnoremap gi :YcmCompleter GoToDefinition<CR>
+nnoremap gy :YcmCompleter GoToDefinitionElseDeclaration<CR>
 let g:ycm_enable_diagnostic_signs=0
-
+endif
 " vim-gitgutter -----------------------
 " Set vim-gitgutter updatetime
 set updatetime=1000
