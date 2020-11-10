@@ -41,13 +41,10 @@ Plug 'tpope/vim-commentary', { 'on': ['<Plug>CommentaryLine', '<Plug>Commentary'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 " Zen coding
 Plug 'mattn/emmet-vim', { 'for': ['html', 'htmldjango', 'javascript'] }
-" Git integration
-Plug 'motemen/git-vim'
-" Airline
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 " Color scheme
 Plug 'cocopon/iceberg.vim'
+Plug 'gkeep/iceberg-dark'
+Plug 'itchyny/lightline.vim'
 " Surround
 Plug 'tpope/vim-surround', { 'for': ['html', 'htmldjango', 'javascript'] }
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
@@ -55,15 +52,22 @@ Plug 'tpope/vim-surround', { 'for': ['html', 'htmldjango', 'javascript'] }
 Plug 'python-mode/python-mode',{'for': 'python', 'branch': 'develop'}
 
 if has('nvim')
-    " Plug 'davidhalter/jedi'
+Plug 'davidhalter/jedi'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-tabnine', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-python', {'do': 'yarn install --frozen-lockfile'}
 Plug 'neoclide/coc-highlight', {'do': 'yarn install --frozen-lockfile'}
-Plug 'clangd/coc-clangd', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-pairs', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
+Plug 'voldikss/coc-cmake', {'do': 'yarn install --frozen-lockfile'}
+" Plug 'clangd/coc-clangd', {'do': 'yarn install --frozen-lockfile'}
+Plug 'MaskRay/ccls', {'do': 'yarn install --frozen-lockfile'}
 Plug 'josa42/coc-sh', {'do': 'yarn install --frozen-lockfile'}
 Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
+Plug 'microsoft/pyright', {'do': 'yarn install --frozen-lockfile'}
+Plug 'jackguo380/vim-lsp-cxx-highlight'
 else
 " YouCompleteMe
 function! YCMInstall(info)
@@ -80,6 +84,8 @@ function! YCMInstall(info)
     "endif
 endfunction
 Plug 'Valloric/YouCompleteMe',{ 'on':[], 'for':['javascript','c','cpp','python','typescript','sh','zsh'], 'do':  function('YCMInstall') }
+" auto-pairs
+Plug 'jiangmiao/auto-pairs'
 endif
 " Snippets manager (SnipMate), dependencies, and snippets repo
 Plug 'MarcWeber/vim-addon-mw-utils', { 'for': ['html', 'htmldjango', 'javascript'] }
@@ -130,12 +136,14 @@ Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
 Plug 'junegunn/limelight.vim', { 'for': 'markdown' }
 " Typescript support
 Plug 'leafgarland/typescript-vim', { 'for':'typescript'}
-" auto-pairs
-Plug 'jiangmiao/auto-pairs'
 " A git wrpper
-Plug 'tpope/vim-fugitive', { 'on': ['GitBlame','GitDiff','GitLog','GitAdd'] }
+Plug 'tpope/vim-fugitive'
 " Local vimrc
 Plug 'embear/vim-localvimrc'
+" Rainbow Parentheses Improved, shorter code, no level limit, smooth and fast, powerful configuration.
+Plug 'luochen1990/rainbow'
+" This file contains additional syntax highlighting that I use for C++11/14/17 development in Vim. Compared to the standard syntax highlighting for C++ it adds highlighting of (user defined) functions and the containers and types in the standard library / boost.
+" Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['cpp'] }
 call plug#end()
 " ============================================================================
 " Install plugins the first time vim runs
@@ -217,10 +225,34 @@ imap <C-J> <C-X><C-O>
 " save as sudo
 ca w!! w !sudo tee "%"
 
+if has('nvim')
 " Set color scheme
 colo iceberg
-let &t_Co = 256
-
+endif
+let g:lightline = {
+    \ 'colorscheme': 'icebergDark',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ,
+      \             ['CurrentFunction']],
+      \   'right': [ [ 'lineinfo' ],
+      \              [ 'percent' ],
+      \              [ 'fileformat', 'fileencoding', 'filetype', 'charvaluehex' ] ]
+      \ },
+      \ 'component': {
+      \   'charvaluehex': '0x%B',
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead',
+      \   'CurrentFunction': 'CocCurrentFunction'
+      \ },
+      \ }
+function! CocCurrentFunction()
+    return get(b:, 'coc_current_function', '')
+endfunction
+set noshowmode
+"let g:airline_theme='icebergDark'
+set t_Co=256
 " autocompletion of files and commands behaves like shell
 " (complete only the common part, list the options that match)
 set wildmode=list:longest
@@ -342,18 +374,6 @@ highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
 highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
 highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
-" Airline ------------------------------
-
-let g:airline_powerline_fonts = 1
-let g:airline_theme = 'bubblegum'
-let g:airline#extensions#whitespace#enabled = 0
-let g:airline#extensions#ycm#enabled = 1
-let g:airline#extensions#ycm#error_symbol = 'E:'
-let g:airline#extensions#ycm#warning_symbol = 'W:'
-let g:airline_section_c ="%t%m %#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#"
-set tr
-"let g:airline#extensions#tabline#fnamemod
-let g:airline_highlighting_cache = 1
 " Autoformat ---------------------------
 let g:formatters_c =['clangformat']
 let g:formatters_json=['fixjson'] "Json formater
@@ -389,18 +409,6 @@ nmap cn :cnext<CR>
 nmap cp :cprevious<CR>
 let g:cscope_interested_files = '\.c$\|\.cpp$\|\.h$\|\.hpp'
 set cst
-
-" Airline -----------------------------
-if !exists('g:airline_symbols')
-   let g:airline_symbols = {}
-endif
-let g:airline_left_sep = '⮀'
-let g:airline_left_alt_sep = '⮁'
-let g:airline_right_sep = '⮂'
-let g:airline_right_alt_sep = '⮃'
-let g:airline_symbols.branch = '⭠'
-let g:airline_symbols.readonly = '⭤'
-let g:airline_symbols.linenr = '⭡'
 
 " Use rust autoformat
 let g:rustfmt_autosave = 1
@@ -456,12 +464,33 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
 if has('nvim')
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+let g:coc_snippet_next = '<tab>'
+set clipboard+=unnamed 
 else
 " YouCompleteMe ----------------------
 let g:ycm_autoclose_preview_window_after_completion = 1
@@ -520,10 +549,10 @@ endif
 nnoremap <leader>d :Dox<CR>
 
 " vim-fugitive ------------------------
-nmap <Leader>gb :GitBlame<CR>
-nmap <Leader>gd :GitDiff<CR>
-nmap <Leader>gl :GitLog<CR>
-nmap <Leader>ga :GitAdd<CR>
+nmap <Leader>gb :Git blame<CR>
+nmap <Leader>gd :Git diff %<CR>
+nmap <Leader>gl :Git log %<CR>
+nmap <Leader>ga :Git add %<CR>
 
 " Commentary --------------------------
 autocmd! User vim-commentary unmap gcc
@@ -535,3 +564,28 @@ vmap <Leader>c<space> <Plug>Commentary
 let g:localvimrc_ask = 0
 let g:localvimrc_persistent = 2
 let g:localvimrc_sandbox = 0
+
+" rainbow
+let g:rainbow_active = 1
+let g:rainbow_conf = {
+\   'guifgs': ['darkorange3', 'seagreen3', 'royalblue3', 'firebrick'],
+\   'ctermfgs': ['lightyellow', 'lightcyan','lightblue', 'lightmagenta'],
+\   'operators': '_,_',
+\   'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+\   'separately': {
+\       '*': {},
+\       'tex': {
+\           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
+\       },
+\       'lisp': {
+\           'guifgs': ['darkorange3', 'seagreen3', 'royalblue3', 'firebrick'],
+\       },
+\       'vim': {
+\           'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
+\       },
+\       'html': {
+\           'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
+\       },
+\       'css': 0,
+\   }
+\}
