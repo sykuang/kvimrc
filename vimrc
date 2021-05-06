@@ -144,6 +144,7 @@ Plug 'embear/vim-localvimrc'
 Plug 'luochen1990/rainbow'
 " This file contains additional syntax highlighting that I use for C++11/14/17 development in Vim. Compared to the standard syntax highlighting for C++ it adds highlighting of (user defined) functions and the containers and types in the standard library / boost.
 " Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['cpp'] }
+Plug 'bogado/file-line'
 call plug#end()
 " ============================================================================
 " Install plugins the first time vim runs
@@ -378,7 +379,7 @@ highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 let g:formatters_c =['clangformat']
 let g:formatters_json=['fixjson'] "Json formater
 let g:formatdef_jsbeautify_javascript = "'js-beautify -X -s 2 -j'" " Javascript formater
-let g:formatters_python=['yapf']
+let g:formatters_python=['black']
 let g:formatter_yapf_style = 'pep8' " Python formater
 let g:autoformat_verbosemode = 0
 noremap ,af :Autoformat<CR>
