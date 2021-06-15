@@ -143,14 +143,6 @@ Plug 'luochen1990/rainbow'
 Plug 'bogado/file-line'
 call plug#end()
 " ============================================================================
-" Install plugins the first time vim runs
-
-if vim_plug_just_installed
-    echo "Installing Bundles, please ignore key map error messages"
-    :PlugInstall
-endif
-
-" ============================================================================
 " Vim settings and mappings
 
 " allow plugins by file type (required for plugins!)
